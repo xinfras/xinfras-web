@@ -3,11 +3,41 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import { cn } from "@/lib/utils";
+import type { Components } from "react-markdown";
 
 interface MarkdownContentProps {
   content: string;
   className?: string;
 }
+
+// Custom components to handle code blocks properly
+const components: Components = {
+  pre: ({ children, ...props }) => (
+    <pre {...props} className="bg-muted border border-border rounded-lg overflow-x-auto p-4">
+      {children}
+    </pre>
+  ),
+  code: ({ className, children, ...props }) => {
+    const isInline = !className;
+    if (isInline) {
+      return (
+        <code
+          className="rounded bg-muted px-1.5 py-0.5 text-sm font-normal"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    }
+    // For code blocks inside <pre>, strip leading/trailing whitespace
+    const content = String(children).replace(/^\n+|\n+$/g, "");
+    return (
+      <code className={cn("text-sm", className)} {...props}>
+        {content}
+      </code>
+    );
+  },
+};
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
   return (
@@ -20,8 +50,6 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         "prose-h3:text-xl prose-h3:mt-8",
         "prose-p:leading-7",
         "prose-a:text-primary prose-a:no-underline hover:prose-a:underline",
-        "prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg",
-        "prose-pre:overflow-x-auto",
         "prose-table:border prose-table:border-border",
         "prose-th:border prose-th:border-border prose-th:bg-muted prose-th:px-4 prose-th:py-2",
         "prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2",
@@ -34,34 +62,7 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]} 
         rehypePlugins={[rehypeRaw, rehypeSlug]}
-        components={{
-          code({ node, inline, className, children, ...props }: any) {
-            if (inline) {
-              return (
-                <code
-                  className={cn(
-                    "rounded bg-muted px-1.5 py-0.5 text-sm font-normal before:content-none after:content-none",
-                    className
-                  )}
-                  {...props}
-                >
-                  {children}
-                </code>
-              );
-            }
-            return (
-              <code
-                className={cn(
-                  "bg-transparent p-0 text-sm font-normal before:content-none after:content-none",
-                  className
-                )}
-                {...props}
-              >
-                {children}
-              </code>
-            );
-          },
-        }}
+        components={components}
       >
         {content}
       </ReactMarkdown>
