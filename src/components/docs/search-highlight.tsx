@@ -19,19 +19,19 @@ export function SearchHighlight() {
       style.id = styleId;
       style.textContent = `
         @keyframes highlightPulse {
-          0%, 100% { background-color: hsl(var(--primary) / 0.15); }
-          50% { background-color: hsl(var(--primary) / 0.25); }
+          0%, 100% { background-color: rgb(253 224 71 / 0.5); }
+          50% { background-color: rgb(253 224 71 / 0.3); }
         }
         @keyframes highlightFadeIn {
           from { background-color: transparent; }
-          to { background-color: hsl(var(--primary) / 0.2); }
+          to { background-color: rgb(253 224 71 / 0.4); }
         }
         @keyframes highlightFadeOut {
-          from { background-color: hsl(var(--primary) / 0.2); }
+          from { background-color: rgb(253 224 71 / 0.4); }
           to { background-color: transparent; }
         }
         .search-highlight {
-          background-color: hsl(var(--primary) / 0.2);
+          background-color: rgb(253 224 71 / 0.4);
           border-radius: 3px;
           padding: 1px 3px;
           margin: 0 -1px;
@@ -43,13 +43,19 @@ export function SearchHighlight() {
           animation: highlightFadeOut 0.5s ease-out forwards;
         }
         .search-highlight-code {
-          background-color: hsl(var(--primary) / 0.08);
+          background-color: rgb(253 224 71 / 0.15);
           border-radius: 8px;
           animation: highlightPulse 2s ease-in-out 2;
           transition: background-color 0.5s ease-out;
         }
         .search-highlight-code.fading {
           background-color: transparent;
+        }
+        .dark .search-highlight {
+          background-color: rgb(253 224 71 / 0.3);
+        }
+        .dark .search-highlight-code {
+          background-color: rgb(253 224 71 / 0.1);
         }
       `;
       document.head.appendChild(style);
