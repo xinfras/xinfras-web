@@ -20,7 +20,6 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         "prose-h3:text-xl prose-h3:mt-8",
         "prose-p:leading-7",
         "prose-a:text-primary prose-a:no-underline hover:prose-a:underline",
-        "prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none",
         "prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg",
         "prose-pre:overflow-x-auto",
         "prose-table:border prose-table:border-border",
@@ -35,6 +34,34 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]} 
         rehypePlugins={[rehypeRaw, rehypeSlug]}
+        components={{
+          code({ node, inline, className, children, ...props }: any) {
+            if (inline) {
+              return (
+                <code
+                  className={cn(
+                    "rounded bg-muted px-1.5 py-0.5 text-sm font-normal before:content-none after:content-none",
+                    className
+                  )}
+                  {...props}
+                >
+                  {children}
+                </code>
+              );
+            }
+            return (
+              <code
+                className={cn(
+                  "bg-transparent p-0 text-sm font-normal before:content-none after:content-none",
+                  className
+                )}
+                {...props}
+              >
+                {children}
+              </code>
+            );
+          },
+        }}
       >
         {content}
       </ReactMarkdown>
