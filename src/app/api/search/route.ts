@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { contentSources, fetchDocsContent, fallbackContent, type ContentSource } from "@/lib/github";
+import { contentSources, fetchDocsContent, fallbackContent, fetchAllDocsStructure, fetchDocContent, type ContentSource, type DocItem } from "@/lib/github";
 
 interface SearchMatch {
   text: string;
@@ -28,7 +28,9 @@ function slugify(text: string): string {
 function searchInContent(
   content: string,
   query: string,
-  source: ContentSource
+  source: ContentSource,
+  customHref?: string,
+  customTitle?: string
 ): SearchResult | null {
   const lowerContent = content.toLowerCase();
   const lowerQuery = query.toLowerCase();
@@ -37,9 +39,10 @@ function searchInContent(
     return null;
   }
 
-  // Extract title from first H1
+  // Extract title from first H1 or use custom title
   const titleMatch = content.match(/^#\s+(.+)$/m);
-  const title = titleMatch ? titleMatch[1] : source;
+  const title = customTitle || (titleMatch ? titleMatch[1] : source);
+  const href = customHref || `/docs/${source}`;
 
   // Parse sections from headings
   const lines = content.split("\n");
@@ -101,9 +104,25 @@ function searchInContent(
   return {
     title,
     source,
-    href: `/docs/${source}`,
+    href,
     matches,
   };
+}
+
+// Flatten doc items to get all file paths
+function flattenDocItems(items: DocItem[]): { slug: string; title: string }[] {
+  const result: { slug: string; title: string }[] = [];
+  
+  for (const item of items) {
+    if (item.type === "file") {
+      result.push({ slug: item.slug, title: item.title });
+    }
+    if (item.children) {
+      result.push(...flattenDocItems(item.children));
+    }
+  }
+  
+  return result;
 }
 
 export async function GET(request: NextRequest) {
@@ -115,10 +134,12 @@ export async function GET(request: NextRequest) {
   }
 
   const results: SearchResult[] = [];
-
-  // Search in all three docs
   const sources = Object.keys(contentSources) as ContentSource[];
   
+  // First, get the docs structure to know all available docs
+  const docsStructure = await fetchAllDocsStructure();
+  
+  // Search in main README of each package
   await Promise.all(
     sources.map(async (source) => {
       try {
@@ -137,6 +158,29 @@ export async function GET(request: NextRequest) {
       }
     })
   );
+
+  // Search in individual doc files
+  for (const structure of docsStructure) {
+    const docs = flattenDocItems(structure.items);
+    
+    await Promise.all(
+      docs.map(async (doc) => {
+        try {
+          const content = await fetchDocContent(structure.package, doc.slug);
+          const href = `/docs/${structure.package}/${doc.slug}`;
+          const result = searchInContent(content, query, structure.package, href, doc.title);
+          if (result) {
+            results.push(result);
+          }
+        } catch {
+          // Skip docs that fail to load
+        }
+      })
+    );
+  }
+
+  // Sort results: prioritize more matches
+  results.sort((a, b) => b.matches.length - a.matches.length);
 
   return NextResponse.json({ results });
 }

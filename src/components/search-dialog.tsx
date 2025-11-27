@@ -110,16 +110,17 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
           const href = selected.match?.anchor 
             ? `${selected.result.href}#${selected.match.anchor}`
             : selected.result.href;
-          router.push(href);
-          onOpenChange(false);
+          handleSelect(href, query);
         }
       }
     },
     [selectableItems, selectedIndex, router, onOpenChange]
   );
 
-  const handleSelect = (href: string) => {
-    router.push(href);
+  const handleSelect = (href: string, searchQuery?: string) => {
+    // Add search query to URL so we can highlight and scroll to it
+    const url = searchQuery ? `${href}?highlight=${encodeURIComponent(searchQuery)}` : href;
+    router.push(url);
     onOpenChange(false);
   };
 
@@ -165,7 +166,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                   <div key={result.source} className="space-y-1">
                     {/* Main doc result */}
                     <button
-                      onClick={() => handleSelect(result.href)}
+                      onClick={() => handleSelect(result.href, query)}
                       className={cn(
                         "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
                         docItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
@@ -192,7 +193,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                       return (
                         <button
                           key={`${result.source}-${i}`}
-                          onClick={() => handleSelect(`${result.href}#${match.anchor}`)}
+                          onClick={() => handleSelect(`${result.href}#${match.anchor}`, query)}
                           className={cn(
                             "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ml-4",
                             matchItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
