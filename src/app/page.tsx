@@ -19,37 +19,27 @@ import {
   Rocket,
   ChevronRight,
   Copy,
-  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
 const frameworks = [
   {
     name: "ai-infra",
-    description: "LLM orchestration, MCP servers, and agent frameworks for intelligent applications.",
+    description: "LLM orchestration, MCP servers, and agent frameworks.",
     icon: Cpu,
     href: "/docs/ai-infra",
-    color: "from-blue-500/20 to-cyan-500/20",
-    iconBg: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    features: ["LLM Orchestration", "MCP Servers", "Agent Graphs"],
   },
   {
     name: "svc-infra", 
-    description: "Production-ready backend infrastructure with auth, database, caching, and jobs.",
+    description: "Backend infrastructure with auth, database, and jobs.",
     icon: Server,
     href: "/docs/svc-infra",
-    color: "from-violet-500/20 to-purple-500/20",
-    iconBg: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
-    features: ["API Framework", "Auth & RBAC", "Job Queues"],
   },
   {
     name: "fin-infra",
-    description: "Complete billing infrastructure for payments, subscriptions, and invoicing.",
+    description: "Billing infrastructure for payments and subscriptions.",
     icon: Wallet,
     href: "/docs/fin-infra",
-    color: "from-emerald-500/20 to-green-500/20",
-    iconBg: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    features: ["Stripe Integration", "Subscriptions", "Usage Billing"],
   },
 ];
 
@@ -140,70 +130,37 @@ export default function Home() {
           </section>
 
           {/* Frameworks Section */}
-          <section className="py-24 sm:py-32">
+          <section className="py-20 sm:py-24">
             <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
               
               {/* Section header */}
-              <div className="text-center mb-16">
-                <Badge variant="secondary" className="mb-4">
-                  <Sparkles className="mr-1.5 h-3 w-3" />
-                  Frameworks
-                </Badge>
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              <div className="text-center mb-12">
+                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                   Three frameworks. One ecosystem.
                 </h2>
-                <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Each framework is designed to work independently or together, 
-                  giving you flexibility without complexity.
+                <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+                  Work independently or together—flexibility without complexity.
                 </p>
               </div>
 
               {/* Framework cards */}
-              <div className="grid gap-6 lg:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-3">
                 {frameworks.map((framework) => (
                   <Link 
                     key={framework.name} 
                     href={framework.href}
-                    className="group relative"
+                    className="group flex items-start gap-4 rounded-lg border border-border p-5 transition-colors hover:bg-muted/50"
                   >
-                    <div className="relative h-full rounded-2xl border border-border bg-card p-8 transition-all duration-300 hover:border-primary/50">
-                      
-                      {/* Gradient overlay on hover */}
-                      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${framework.color} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
-                      
-                      <div className="relative">
-                        {/* Icon */}
-                        <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${framework.iconBg}`}>
-                          <framework.icon className="h-6 w-6" />
-                        </div>
-                        
-                        {/* Title */}
-                        <h3 className="mt-6 text-xl font-semibold">{framework.name}</h3>
-                        
-                        {/* Description */}
-                        <p className="mt-2 text-muted-foreground leading-relaxed">
-                          {framework.description}
-                        </p>
-                        
-                        {/* Features */}
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {framework.features.map((feature) => (
-                            <span 
-                              key={feature} 
-                              className="inline-flex items-center rounded-md bg-muted px-2.5 py-1 text-xs font-medium"
-                            >
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
-                        
-                        {/* Link */}
-                        <div className="mt-8 flex items-center text-sm font-medium text-primary">
-                          Learn more
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </div>
-                      </div>
+                    <div className="rounded-md bg-muted p-2">
+                      <framework.icon className="h-5 w-5 text-foreground" />
                     </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium">{framework.name}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                        {framework.description}
+                      </p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 mt-1" />
                   </Link>
                 ))}
               </div>
