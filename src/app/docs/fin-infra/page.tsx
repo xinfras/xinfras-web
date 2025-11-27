@@ -43,7 +43,7 @@ export default function FinInfraPage() {
             Financial Infrastructure
           </Badge>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">Fin Infra</h1>
+        <h1 className="text-4xl font-bold tracking-tight">fin-infra</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Complete financial and billing infrastructure for payments, subscriptions, 
           invoicing, and usage-based billing. Built on Stripe with flexibility for any billing model.
@@ -65,14 +65,14 @@ export default function FinInfraPage() {
               <TabsTrigger value="poetry">Poetry</TabsTrigger>
             </TabsList>
             <TabsContent value="pip">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>pip install fin-infra</code>
                 </pre>
               </div>
             </TabsContent>
             <TabsContent value="poetry">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>poetry add fin-infra</code>
                 </pre>
@@ -92,8 +92,8 @@ export default function FinInfraPage() {
           <CardDescription>Set up billing for your application</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg bg-muted p-4">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+          <div className="rounded-lg bg-muted p-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
               <Code className="h-3.5 w-3.5" />
               billing.py
             </div>
@@ -198,7 +198,7 @@ await billing.record_usage(
           Webhook Events
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Fin Infra handles Stripe webhooks automatically with built-in signature verification and event routing.
+          fin-infra handles Stripe webhooks automatically with built-in signature verification and event routing.
         </p>
         <div className="grid gap-2">
           <div className="flex items-center gap-2">

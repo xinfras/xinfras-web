@@ -27,7 +27,7 @@ const docsConfig: DocSection[] = [
     ],
   },
   {
-    title: "AI Infra",
+    title: "ai-infra",
     items: [
       { title: "Overview", href: "/docs/ai-infra", icon: Cpu },
       { title: "LLM Integration", href: "/docs/ai-infra/llm", icon: Code },
@@ -37,7 +37,7 @@ const docsConfig: DocSection[] = [
     ],
   },
   {
-    title: "Svc Infra",
+    title: "svc-infra",
     items: [
       { title: "Overview", href: "/docs/svc-infra", icon: Server },
       { title: "API Framework", href: "/docs/svc-infra/api", icon: Code },
@@ -47,7 +47,7 @@ const docsConfig: DocSection[] = [
     ],
   },
   {
-    title: "Fin Infra",
+    title: "fin-infra",
     items: [
       { title: "Overview", href: "/docs/fin-infra", icon: Wallet },
       { title: "Payments", href: "/docs/fin-infra/payments", icon: CreditCard },

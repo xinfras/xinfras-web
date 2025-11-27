@@ -8,9 +8,9 @@ import { useState, useEffect } from "react";
 
 const navigation = [
   { name: "Docs", href: "/docs" },
-  { name: "AI Infra", href: "/docs/ai-infra" },
-  { name: "Svc Infra", href: "/docs/svc-infra" },
-  { name: "Fin Infra", href: "/docs/fin-infra" },
+  { name: "ai-infra", href: "/docs/ai-infra" },
+  { name: "svc-infra", href: "/docs/svc-infra" },
+  { name: "fin-infra", href: "/docs/fin-infra" },
 ];
 
 export function Header() {

@@ -43,7 +43,7 @@ export default function AIInfraPage() {
             AI Infrastructure
           </Badge>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">AI Infra</h1>
+        <h1 className="text-4xl font-bold tracking-tight">ai-infra</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Build intelligent AI-powered applications with LLM orchestration, agent frameworks, 
           MCP servers, and powerful tool execution capabilities.
@@ -65,14 +65,14 @@ export default function AIInfraPage() {
               <TabsTrigger value="poetry">Poetry</TabsTrigger>
             </TabsList>
             <TabsContent value="pip">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>pip install ai-infra</code>
                 </pre>
               </div>
             </TabsContent>
             <TabsContent value="poetry">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>poetry add ai-infra</code>
                 </pre>
@@ -92,8 +92,8 @@ export default function AIInfraPage() {
           <CardDescription>Create an AI agent in just a few lines of code</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg bg-muted p-4">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+          <div className="rounded-lg bg-muted p-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
               <Code className="h-3.5 w-3.5" />
               agent.py
             </div>
@@ -114,7 +114,7 @@ graph.add_node("llm", LLM("gpt-4o"))
 graph.add_tool(search_docs)
 
 # Run the agent
-response = await graph.run("What is AI Infra?")`}
+response = await graph.run("What is ai-infra?")`}
               </code>
             </pre>
           </div>

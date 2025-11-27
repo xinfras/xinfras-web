@@ -43,7 +43,7 @@ export default function SvcInfraPage() {
             Backend Infrastructure
           </Badge>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">Svc Infra</h1>
+        <h1 className="text-4xl font-bold tracking-tight">svc-infra</h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Generic, reusable backend infrastructure for any service-based application. 
           Provides API framework, authentication, database, caching, job queues, and observability.
@@ -65,14 +65,14 @@ export default function SvcInfraPage() {
               <TabsTrigger value="poetry">Poetry</TabsTrigger>
             </TabsList>
             <TabsContent value="pip">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>pip install svc-infra</code>
                 </pre>
               </div>
             </TabsContent>
             <TabsContent value="poetry">
-              <div className="rounded-lg bg-muted p-4 mt-4">
+              <div className="rounded-lg bg-muted p-3 mt-3">
                 <pre className="text-sm text-foreground/90 overflow-x-auto">
                   <code>poetry add svc-infra</code>
                 </pre>
@@ -92,8 +92,8 @@ export default function SvcInfraPage() {
           <CardDescription>Create a production-ready API in minutes</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg bg-muted p-4">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+          <div className="rounded-lg bg-muted p-3">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
               <Code className="h-3.5 w-3.5" />
               app.py
             </div>
@@ -154,7 +154,7 @@ app.include_router(router)`}
             <Layers className="h-5 w-5" />
             Architecture
           </CardTitle>
-          <CardDescription>How Svc Infra components work together</CardDescription>
+          <CardDescription>How svc-infra components work together</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

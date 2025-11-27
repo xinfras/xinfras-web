@@ -3,17 +3,17 @@ import { Command } from "lucide-react";
 
 const frameworks = [
   {
-    name: "AI Infra",
+    name: "ai-infra",
     href: "/docs/ai-infra",
     description: "Build intelligent AI-powered applications",
   },
   {
-    name: "Svc Infra",
+    name: "svc-infra",
     href: "/docs/svc-infra",
     description: "Backend infrastructure for any service",
   },
   {
-    name: "Fin Infra",
+    name: "fin-infra",
     href: "/docs/fin-infra",
     description: "Financial and billing infrastructure",
   },

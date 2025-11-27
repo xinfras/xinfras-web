@@ -5,19 +5,19 @@ import Link from "next/link";
 
 const frameworks = [
   {
-    name: "AI Infra",
+    name: "ai-infra",
     description: "Build AI-powered applications with LLM orchestration, agent frameworks, and MCP servers.",
     icon: Cpu,
     href: "/docs/ai-infra",
   },
   {
-    name: "Svc Infra",
+    name: "svc-infra",
     description: "Production-ready backend infrastructure with APIs, auth, caching, and job queues.",
     icon: Server,
     href: "/docs/svc-infra",
   },
   {
-    name: "Fin Infra",
+    name: "fin-infra",
     description: "Financial infrastructure for payments, subscriptions, invoicing, and metering.",
     icon: Wallet,
     href: "/docs/fin-infra",
@@ -53,11 +53,11 @@ export default function DocsPage() {
               </div>
               <pre className="text-sm text-foreground/90 overflow-x-auto">
                 <code>
-                  <span className="text-muted-foreground"># Install AI Infra</span>{"\n"}
+                  <span className="text-muted-foreground"># Install ai-infra</span>{"\n"}
                   pip install ai-infra{"\n\n"}
-                  <span className="text-muted-foreground"># Install Svc Infra</span>{"\n"}
+                  <span className="text-muted-foreground"># Install svc-infra</span>{"\n"}
                   pip install svc-infra{"\n\n"}
-                  <span className="text-muted-foreground"># Install Fin Infra</span>{"\n"}
+                  <span className="text-muted-foreground"># Install fin-infra</span>{"\n"}
                   pip install fin-infra
                 </code>
               </pre>

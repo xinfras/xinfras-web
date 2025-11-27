@@ -9,21 +9,21 @@ import Link from "next/link";
 
 const frameworks = [
   {
-    name: "AI Infra",
+    name: "ai-infra",
     description: "Build intelligent AI-powered applications with LLM orchestration, MCP servers, and agent frameworks.",
     icon: Cpu,
     href: "/docs/ai-infra",
     features: ["LLM Orchestration", "MCP Servers", "Agent Graphs", "Tool Execution"],
   },
   {
-    name: "Svc Infra",
+    name: "svc-infra",
     description: "Generic, reusable backend infrastructure for any service-based application.",
     icon: Server,
     href: "/docs/svc-infra",
     features: ["API Framework", "Auth & RBAC", "Database & Caching", "Job Queues"],
   },
   {
-    name: "Fin Infra",
+    name: "fin-infra",
     description: "Financial and billing infrastructure for payments, subscriptions, and invoicing.",
     icon: Wallet,
     href: "/docs/fin-infra",
