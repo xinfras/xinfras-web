@@ -88,8 +88,16 @@ export function HeaderClient({ docsStructure }: HeaderClientProps) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    const dark = document.documentElement.classList.contains("dark");
-    setIsDark(dark);
+    // Check localStorage first, then system preference
+    const stored = localStorage.getItem("theme");
+    if (stored) {
+      const dark = stored === "dark";
+      setIsDark(dark);
+      document.documentElement.classList.toggle("dark", dark);
+    } else {
+      const dark = document.documentElement.classList.contains("dark");
+      setIsDark(dark);
+    }
   }, []);
 
   // Handle keyboard shortcut
@@ -105,8 +113,10 @@ export function HeaderClient({ docsStructure }: HeaderClientProps) {
   }, []);
 
   const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    setIsDark(!isDark);
+    const newDark = !isDark;
+    document.documentElement.classList.toggle("dark", newDark);
+    localStorage.setItem("theme", newDark ? "dark" : "light");
+    setIsDark(newDark);
   };
 
   return (
