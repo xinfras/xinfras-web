@@ -141,7 +141,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl gap-0 p-0 overflow-hidden" showCloseButton={false}>
+      <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl gap-0 p-0 overflow-hidden sm:w-full" showCloseButton={false}>
         <VisuallyHidden.Root>
           <DialogTitle>Search documentation</DialogTitle>
         </VisuallyHidden.Root>
@@ -156,7 +156,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             className="h-12 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             autoFocus
           />
-          {isLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+          {isLoading && <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />}
         </div>
 
         <div className="max-h-[400px] overflow-y-auto">
@@ -164,7 +164,22 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
               Type at least 2 characters to search...
             </div>
-          ) : results.length === 0 && !isLoading ? (
+          ) : isLoading ? (
+            <div className="p-2 space-y-2">
+              {/* Loading skeleton */}
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="rounded-lg px-3 py-3 animate-pulse">
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 rounded bg-muted" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-32 rounded bg-muted" />
+                      <div className="h-3 w-48 rounded bg-muted" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : results.length === 0 ? (
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
               No results found for &quot;{query}&quot;
             </div>
@@ -191,8 +206,8 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium">{result.title}</span>
-                          <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                          <span className="font-medium truncate">{result.title}</span>
+                          <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted shrink-0">
                             {result.source}
                           </span>
                         </div>
@@ -214,10 +229,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                             matchItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                           )}
                         >
-                          <Hash className="h-4 w-4 text-muted-foreground" />
+                          <Hash className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium text-sm">{match.section}</div>
-                            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                            <div className="font-medium text-sm truncate">{match.section}</div>
+                            <p className="text-xs text-muted-foreground truncate mt-0.5">
                               {match.text}
                             </p>
                           </div>
@@ -232,7 +247,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
         </div>
 
         <div className="flex items-center justify-between border-t px-3 py-2 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
             <kbd className="rounded border bg-muted px-1.5 py-0.5">↑↓</kbd>
             <span>Navigate</span>
           </div>
