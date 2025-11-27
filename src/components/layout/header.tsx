@@ -108,7 +108,7 @@ export function Header() {
           <nav className="flex items-center gap-1">
             <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
               <a
-                href="https://github.com"
+                href="https://github.com/xinfras"
                 target="_blank"
                 rel="noreferrer"
               >
