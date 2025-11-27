@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# xinfras-web
+
+Documentation website for the xinfras infrastructure frameworks: **ai-infra**, **svc-infra**, and **fin-infra**.
+
+## Overview
+
+xinfras-web is a modern documentation site built with Next.js, featuring:
+
+- **Interactive Background** - Canvas-based particle system with mouse tracking
+- **Dark/Light Mode** - Automatic theme switching with charcoal blue brand color
+- **Responsive Design** - Mobile-first, works on all screen sizes
+- **shadcn/ui Components** - Consistent, accessible UI components
+
+## Frameworks Documented
+
+| Framework | Description |
+|-----------|-------------|
+| **ai-infra** | LLM orchestration, agent frameworks, MCP servers, and tool execution |
+| **svc-infra** | Backend infrastructure with APIs, auth, database, caching, and job queues |
+| **fin-infra** | Financial infrastructure for payments, subscriptions, and billing |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+make install
+
+# Run development server
+make dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Create production build
+make build
 
-## Learn More
+# Start production server
+make start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/
+│   ├── docs/           # Documentation pages
+│   │   ├── ai-infra/   # AI Infra docs
+│   │   ├── svc-infra/  # Svc Infra docs
+│   │   └── fin-infra/  # Fin Infra docs
+│   ├── globals.css     # Theme and global styles
+│   ├── layout.tsx      # Root layout
+│   └── page.tsx        # Landing page
+├── components/
+│   ├── docs/           # Documentation components
+│   ├── layout/         # Header, footer
+│   └── ui/             # shadcn/ui components
+└── lib/
+    └── utils.ts        # Utility functions
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS v4
+- **Components**: shadcn/ui
+- **Icons**: Lucide React
+- **Language**: TypeScript
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
+
