@@ -83,7 +83,8 @@ async function fetchDirectoryContents(
           Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
         }),
       },
-      next: { revalidate: 300 },
+      // Cache for 1 hour in production to avoid rate limits
+      next: { revalidate: 3600 },
     });
     
     if (!response.ok) {
