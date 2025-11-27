@@ -6,7 +6,6 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import { Check, Copy } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Components } from "react-markdown";
 
@@ -17,13 +16,13 @@ interface MarkdownContentProps {
 
 // Remove the first H1 from markdown content since we show it in the header
 function removeFirstH1(content: string): string {
-  // Match the first line that starts with "# " (H1 heading)
   return content.replace(/^#\s+.+\n+/, "");
 }
 
-// Code block with copy button
+// Clean, minimal code block
 function CodeBlock({ children, className }: { children: string; className?: string }) {
   const [copied, setCopied] = useState(false);
+  const language = className?.replace("language-", "");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(children);
@@ -31,41 +30,43 @@ function CodeBlock({ children, className }: { children: string; className?: stri
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Extract language from className (e.g., "language-python" -> "python")
-  const language = className?.replace("language-", "");
-
   return (
-    <div className="group relative my-4">
-      {language && (
-        <div className="absolute right-12 top-2 text-xs text-muted-foreground font-mono">
-          {language}
-        </div>
-      )}
-      <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto">
-        <code className={cn("text-sm", className)}>
+    <div className="group relative my-5 overflow-hidden rounded-lg border border-border bg-muted">
+      {/* Header bar */}
+      <div className="flex items-center justify-between border-b border-border bg-muted px-4 py-2">
+        <span className="text-xs font-medium text-muted-foreground">
+          {language || "code"}
+        </span>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5" />
+              <span>Copied</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+      {/* Code content */}
+      <pre className="overflow-x-auto p-4 bg-muted/50">
+        <code className="text-sm leading-relaxed text-foreground font-mono">
           {children}
         </code>
       </pre>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
-        onClick={handleCopy}
-      >
-        {copied ? (
-          <Check className="h-3.5 w-3.5 text-green-500" />
-        ) : (
-          <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-        )}
-      </Button>
     </div>
   );
 }
 
-// Custom components to handle code blocks properly
+// Custom components for markdown
 const components: Components = {
   pre: ({ children }) => {
-    // Extract code content from children
     const codeElement = children as React.ReactElement<{ children: string; className?: string }>;
     if (codeElement?.props) {
       const { children: codeChildren, className } = codeElement.props;
@@ -79,14 +80,13 @@ const components: Components = {
     if (isInline) {
       return (
         <code
-          className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono"
+          className="rounded-md bg-muted px-1.5 py-0.5 text-sm font-mono text-foreground"
           {...props}
         >
           {children}
         </code>
       );
     }
-    // Block code is handled by pre
     return <code className={className} {...props}>{children}</code>;
   },
 };

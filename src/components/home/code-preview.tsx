@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Terminal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, Copy } from "lucide-react";
 
 const codeExample = `from svc_infra import App
 from ai_infra import AgentGraph
@@ -28,51 +27,52 @@ export function CodePreview() {
   };
 
   return (
-    <div className="relative group">
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
-        {/* Window header */}
-        <div className="flex items-center justify-between border-b border-border px-4 py-3 bg-muted/50">
-          <div className="flex gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-500/60" />
-            <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-            <div className="h-3 w-3 rounded-full bg-green-500/60" />
+    <div className="rounded-lg bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-800">
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+            <div className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+            <div className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
           </div>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Terminal className="h-3.5 w-3.5" />
-            app.py
-          </div>
+          <span className="text-xs font-medium text-zinc-500">app.py</span>
         </div>
-        {/* Code */}
-        <pre className="p-6 text-sm leading-relaxed overflow-x-auto">
-          <code>
-            <span className="text-blue-600 dark:text-blue-400">from</span> svc_infra <span className="text-blue-600 dark:text-blue-400">import</span> App{"\n"}
-            <span className="text-blue-600 dark:text-blue-400">from</span> ai_infra <span className="text-blue-600 dark:text-blue-400">import</span> AgentGraph{"\n"}
-            <span className="text-blue-600 dark:text-blue-400">from</span> fin_infra <span className="text-blue-600 dark:text-blue-400">import</span> Billing{"\n"}
-            {"\n"}
-            app = App(){"\n"}
-            {"\n"}
-            <span className="text-muted-foreground"># Add AI capabilities</span>{"\n"}
-            graph = AgentGraph(<span className="text-emerald-600 dark:text-emerald-400">&quot;assistant&quot;</span>){"\n"}
-            graph.add_tool(search_docs){"\n"}
-            {"\n"}
-            <span className="text-muted-foreground"># Enable billing</span>{"\n"}
-            billing = Billing(app){"\n"}
-            billing.create_subscription(user_id)
-          </code>
-        </pre>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5" />
+              <span>Copied</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-3 top-12 h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100 bg-background/80 backdrop-blur-sm"
-        onClick={handleCopy}
-      >
-        {copied ? (
-          <Check className="h-4 w-4 text-green-500" />
-        ) : (
-          <Copy className="h-4 w-4 text-muted-foreground" />
-        )}
-      </Button>
+      {/* Code */}
+      <pre className="p-5 overflow-x-auto">
+        <code className="text-sm leading-relaxed font-mono">
+          <span className="text-purple-400">from</span> <span className="text-zinc-300">svc_infra</span> <span className="text-purple-400">import</span> <span className="text-emerald-400">App</span>{"\n"}
+          <span className="text-purple-400">from</span> <span className="text-zinc-300">ai_infra</span> <span className="text-purple-400">import</span> <span className="text-emerald-400">AgentGraph</span>{"\n"}
+          <span className="text-purple-400">from</span> <span className="text-zinc-300">fin_infra</span> <span className="text-purple-400">import</span> <span className="text-emerald-400">Billing</span>{"\n"}
+          {"\n"}
+          <span className="text-zinc-300">app</span> <span className="text-zinc-500">=</span> <span className="text-emerald-400">App</span><span className="text-zinc-400">()</span>{"\n"}
+          {"\n"}
+          <span className="text-zinc-600"># Add AI capabilities</span>{"\n"}
+          <span className="text-zinc-300">graph</span> <span className="text-zinc-500">=</span> <span className="text-emerald-400">AgentGraph</span><span className="text-zinc-400">(</span><span className="text-amber-400">&quot;assistant&quot;</span><span className="text-zinc-400">)</span>{"\n"}
+          <span className="text-zinc-300">graph</span><span className="text-zinc-400">.</span><span className="text-blue-400">add_tool</span><span className="text-zinc-400">(</span><span className="text-zinc-300">search_docs</span><span className="text-zinc-400">)</span>{"\n"}
+          {"\n"}
+          <span className="text-zinc-600"># Enable billing</span>{"\n"}
+          <span className="text-zinc-300">billing</span> <span className="text-zinc-500">=</span> <span className="text-emerald-400">Billing</span><span className="text-zinc-400">(</span><span className="text-zinc-300">app</span><span className="text-zinc-400">)</span>{"\n"}
+          <span className="text-zinc-300">billing</span><span className="text-zinc-400">.</span><span className="text-blue-400">create_subscription</span><span className="text-zinc-400">(</span><span className="text-zinc-300">user_id</span><span className="text-zinc-400">)</span>
+        </code>
+      </pre>
     </div>
   );
 }
