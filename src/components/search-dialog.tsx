@@ -141,25 +141,25 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl gap-0 p-0 overflow-hidden sm:w-full" showCloseButton={false}>
+      <DialogContent className="!max-w-2xl gap-0 p-0 overflow-hidden" showCloseButton={false}>
         <VisuallyHidden.Root>
           <DialogTitle>Search documentation</DialogTitle>
         </VisuallyHidden.Root>
         
-        <div className="flex items-center border-b px-3">
+        <div className="flex items-center border-b px-3 overflow-hidden">
           <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
           <Input
             placeholder="Search documentation..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="h-12 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="h-12 min-w-0 border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             autoFocus
           />
           {isLoading && <Loader2 className="h-4 w-4 shrink-0 animate-spin text-muted-foreground" />}
         </div>
 
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-[400px] overflow-y-auto overflow-x-hidden">
           {query.length < 2 ? (
             <div className="px-4 py-8 text-center text-sm text-muted-foreground">
               Type at least 2 characters to search...
@@ -191,21 +191,21 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                 const docItemIndex = itemIndex;
                 
                 return (
-                  <div key={result.href} className="space-y-1">
+                  <div key={result.href} className="space-y-1 overflow-hidden">
                     {/* Main doc result */}
                     <Button
                       variant="ghost"
                       onClick={() => handleSelect(result.href, query)}
                       className={cn(
-                        "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2.5 text-left",
+                        "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2.5 text-left overflow-hidden",
                         docItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                       )}
                     >
-                      <div className={cn(sourceColors[result.source])}>
+                      <div className={cn("shrink-0", sourceColors[result.source])}>
                         <Icon className="h-5 w-5" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
+                      <div className="flex-1 min-w-0 overflow-hidden">
+                        <div className="flex items-center gap-2 overflow-hidden">
                           <span className="font-medium truncate">{result.title}</span>
                           <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted shrink-0">
                             {result.source}
@@ -225,7 +225,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                           variant="ghost"
                           onClick={() => handleSelect(`${result.href}#${match.anchor}`, query)}
                           className={cn(
-                            "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2 text-left ml-4",
+                            "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2 text-left ml-4 overflow-hidden",
                             matchItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                           )}
                         >
