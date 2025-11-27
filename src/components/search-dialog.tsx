@@ -163,7 +163,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                 const docItemIndex = itemIndex;
                 
                 return (
-                  <div key={result.source} className="space-y-1">
+                  <div key={result.href} className="space-y-1">
                     {/* Main doc result */}
                     <button
                       onClick={() => handleSelect(result.href, query)}
