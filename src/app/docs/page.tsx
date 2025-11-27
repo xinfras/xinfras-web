@@ -72,7 +72,7 @@ export default function DocsPage() {
         <div className="grid gap-4 md:grid-cols-3">
           {frameworks.map((framework) => (
             <Link key={framework.name} href={framework.href}>
-              <Card className="group h-full transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+              <Card className="group h-full transition-colors duration-200 hover:border-primary/50">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <framework.icon className="h-6 w-6 text-primary" />

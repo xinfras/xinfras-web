@@ -138,7 +138,7 @@ await billing.record_usage(
         <div className="grid gap-4 md:grid-cols-2">
           {features.map((feature) => (
             <Link key={feature.title} href={feature.href}>
-              <Card className="group h-full transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+              <Card className="group h-full transition-colors duration-200 hover:border-primary/50">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <feature.icon className="h-5 w-5 text-primary" />
