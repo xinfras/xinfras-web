@@ -79,30 +79,62 @@ export function TableOfContents({ content }: TableOfContentsProps) {
   }
 
   return (
-    <ScrollArea className="h-full py-6 pl-4 pr-6 lg:py-8">
-      <div className="space-y-2">
-        <h4 className="mb-4 text-sm font-semibold tracking-tight">
+    <ScrollArea className="h-full py-6 lg:py-8">
+      <div className="space-y-1">
+        <h4 className="mb-4 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           On This Page
         </h4>
-        <nav className="space-y-1">
-          {headings.map((heading) => (
-            <a
-              key={heading.id}
-              href={`#${heading.id}`}
-              onClick={(e) => handleClick(e, heading.id)}
-              className={cn(
-                "block text-sm transition-colors hover:text-foreground",
-                heading.level === 1 && "font-medium",
-                heading.level === 2 && "pl-2",
-                heading.level === 3 && "pl-4 text-xs",
-                activeId === heading.id
-                  ? "text-primary font-medium"
-                  : "text-muted-foreground"
-              )}
-            >
-              {heading.title}
-            </a>
-          ))}
+        <nav className="relative">
+          {/* Active indicator line */}
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />
+          
+          <div className="space-y-0.5">
+            {headings.map((heading) => {
+              const isActive = activeId === heading.id;
+              const isSection = heading.level <= 2;
+              
+              return (
+                <a
+                  key={heading.id}
+                  href={`#${heading.id}`}
+                  onClick={(e) => handleClick(e, heading.id)}
+                  className={cn(
+                    "group relative flex items-center py-1.5 pl-4 pr-3 text-sm transition-all",
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {/* Left border indicator */}
+                  <span
+                    className={cn(
+                      "absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full transition-all",
+                      isActive
+                        ? "bg-primary"
+                        : "bg-transparent group-hover:bg-muted-foreground/30"
+                    )}
+                  />
+                  
+                  {/* Content */}
+                  <span className="flex items-center gap-2">
+                    {/* Visual hierarchy indicator for subsections */}
+                    {heading.level === 3 && (
+                      <span className="text-muted-foreground/50">—</span>
+                    )}
+                    <span
+                      className={cn(
+                        "transition-colors",
+                        isSection ? "font-medium" : "font-normal",
+                        isActive && "text-primary"
+                      )}
+                    >
+                      {heading.title}
+                    </span>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
         </nav>
       </div>
     </ScrollArea>
