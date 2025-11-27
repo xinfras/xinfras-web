@@ -119,7 +119,19 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
   const handleSelect = (href: string, searchQuery?: string) => {
     // Add search query to URL so we can highlight and scroll to it
-    const url = searchQuery ? `${href}?highlight=${encodeURIComponent(searchQuery)}` : href;
+    // Need to handle case where href has a hash - query params must come before hash
+    let url = href;
+    if (searchQuery) {
+      const hashIndex = href.indexOf('#');
+      if (hashIndex !== -1) {
+        // Insert query param before the hash
+        const path = href.slice(0, hashIndex);
+        const hash = href.slice(hashIndex);
+        url = `${path}?highlight=${encodeURIComponent(searchQuery)}${hash}`;
+      } else {
+        url = `${href}?highlight=${encodeURIComponent(searchQuery)}`;
+      }
+    }
     router.push(url);
     onOpenChange(false);
   };
