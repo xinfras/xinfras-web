@@ -3,6 +3,8 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { InteractiveBackground } from "@/components/ui/interactive-background";
+import { CodePreview } from "@/components/home/code-preview";
+import { CopyButton } from "@/components/home/copy-button";
 import { 
   ArrowRight, 
   Cpu, 
@@ -11,14 +13,12 @@ import {
   Zap, 
   Shield, 
   Code2, 
-  Terminal, 
   Github, 
   Check,
   Layers,
   Puzzle,
   Rocket,
   ChevronRight,
-  Copy,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -120,9 +120,7 @@ export default function Home() {
                 <div className="mt-10 inline-flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm">
                   <span className="text-muted-foreground">$</span>
                   <span>pip install ai-infra svc-infra fin-infra</span>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground">
-                    <Copy className="h-4 w-4" />
-                  </Button>
+                  <CopyButton text="pip install ai-infra svc-infra fin-infra" className="h-6 w-6 text-muted-foreground hover:text-foreground" />
                 </div>
 
               </div>
@@ -205,40 +203,7 @@ export default function Home() {
                 </div>
 
                 {/* Right: Code block */}
-                <div className="relative">
-                  <div className="rounded-xl border border-border bg-card overflow-hidden">
-                    {/* Window header */}
-                    <div className="flex items-center justify-between border-b border-border px-4 py-3 bg-muted/50">
-                      <div className="flex gap-2">
-                        <div className="h-3 w-3 rounded-full bg-red-500/60" />
-                        <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-                        <div className="h-3 w-3 rounded-full bg-green-500/60" />
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Terminal className="h-3.5 w-3.5" />
-                        app.py
-                      </div>
-                    </div>
-                    {/* Code */}
-                    <pre className="p-6 text-sm leading-relaxed overflow-x-auto">
-                      <code>
-                        <span className="text-blue-600 dark:text-blue-400">from</span> svc_infra <span className="text-blue-600 dark:text-blue-400">import</span> App{"\n"}
-                        <span className="text-blue-600 dark:text-blue-400">from</span> ai_infra <span className="text-blue-600 dark:text-blue-400">import</span> AgentGraph{"\n"}
-                        <span className="text-blue-600 dark:text-blue-400">from</span> fin_infra <span className="text-blue-600 dark:text-blue-400">import</span> Billing{"\n"}
-                        {"\n"}
-                        app = App(){"\n"}
-                        {"\n"}
-                        <span className="text-muted-foreground"># Add AI capabilities</span>{"\n"}
-                        graph = AgentGraph(<span className="text-emerald-600 dark:text-emerald-400">&quot;assistant&quot;</span>){"\n"}
-                        graph.add_tool(search_docs){"\n"}
-                        {"\n"}
-                        <span className="text-muted-foreground"># Enable billing</span>{"\n"}
-                        billing = Billing(app){"\n"}
-                        billing.create_subscription(user_id)
-                      </code>
-                    </pre>
-                  </div>
-                </div>
+                <CodePreview />
               </div>
             </div>
           </section>

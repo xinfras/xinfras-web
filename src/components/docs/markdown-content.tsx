@@ -1,7 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { Check, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Components } from "react-markdown";
 
@@ -16,32 +21,73 @@ function removeFirstH1(content: string): string {
   return content.replace(/^#\s+.+\n+/, "");
 }
 
+// Code block with copy button
+function CodeBlock({ children, className }: { children: string; className?: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(children);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Extract language from className (e.g., "language-python" -> "python")
+  const language = className?.replace("language-", "");
+
+  return (
+    <div className="group relative my-4">
+      {language && (
+        <div className="absolute right-12 top-2 text-xs text-muted-foreground font-mono">
+          {language}
+        </div>
+      )}
+      <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto">
+        <code className={cn("text-sm", className)}>
+          {children}
+        </code>
+      </pre>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+        onClick={handleCopy}
+      >
+        {copied ? (
+          <Check className="h-3.5 w-3.5 text-green-500" />
+        ) : (
+          <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+        )}
+      </Button>
+    </div>
+  );
+}
+
 // Custom components to handle code blocks properly
 const components: Components = {
-  pre: ({ children, ...props }) => (
-    <pre {...props} className="bg-muted border border-border rounded-lg overflow-x-auto p-4">
-      {children}
-    </pre>
-  ),
+  pre: ({ children }) => {
+    // Extract code content from children
+    const codeElement = children as React.ReactElement<{ children: string; className?: string }>;
+    if (codeElement?.props) {
+      const { children: codeChildren, className } = codeElement.props;
+      const content = String(codeChildren).replace(/^\n+|\n+$/g, "");
+      return <CodeBlock className={className}>{content}</CodeBlock>;
+    }
+    return <pre>{children}</pre>;
+  },
   code: ({ className, children, ...props }) => {
     const isInline = !className;
     if (isInline) {
       return (
         <code
-          className="rounded bg-muted px-1.5 py-0.5 text-sm font-normal"
+          className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono"
           {...props}
         >
           {children}
         </code>
       );
     }
-    // For code blocks inside <pre>, strip leading/trailing whitespace
-    const content = String(children).replace(/^\n+|\n+$/g, "");
-    return (
-      <code className={cn("text-sm", className)} {...props}>
-        {content}
-      </code>
-    );
+    // Block code is handled by pre
+    return <code className={className} {...props}>{children}</code>;
   },
 };
 
