@@ -24,11 +24,14 @@ function slugify(text: string): string {
 }
 
 function extractHeadings(markdown: string): TocItem[] {
+  // Remove fenced code blocks before extracting headings
+  const withoutCodeBlocks = markdown.replace(/```[\s\S]*?```/g, "");
+  
   const headingRegex = /^(#{1,3})\s+(.+)$/gm;
   const headings: TocItem[] = [];
   let match;
 
-  while ((match = headingRegex.exec(markdown)) !== null) {
+  while ((match = headingRegex.exec(withoutCodeBlocks)) !== null) {
     const level = match[1].length;
     const title = match[2].trim();
     const id = slugify(title);
