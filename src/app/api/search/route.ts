@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { contentSources, fetchDocsContent, fallbackContent, type ContentSource } from "@/lib/github";
 
+interface SearchMatch {
+  text: string;
+  section: string | null;
+  anchor: string | null;
+}
+
 interface SearchResult {
   title: string;
-  content: string;
   source: ContentSource;
   href: string;
-  matches: string[];
+  matches: SearchMatch[];
+}
+
+// Convert heading text to URL-friendly anchor
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
 }
 
 // Simple text search with context extraction
@@ -26,12 +41,34 @@ function searchInContent(
   const titleMatch = content.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1] : source;
 
-  // Find all matches with context
-  const matches: string[] = [];
+  // Parse sections from headings
   const lines = content.split("\n");
+  const sections: { title: string; anchor: string; startLine: number }[] = [];
+  
+  for (let i = 0; i < lines.length; i++) {
+    const headingMatch = lines[i].match(/^#{2,3}\s+(.+)$/);
+    if (headingMatch) {
+      sections.push({
+        title: headingMatch[1],
+        anchor: slugify(headingMatch[1]),
+        startLine: i,
+      });
+    }
+  }
+
+  // Find all matches with context and section info
+  const matches: SearchMatch[] = [];
   
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].toLowerCase().includes(lowerQuery)) {
+      // Find which section this line belongs to
+      let currentSection: { title: string; anchor: string } | null = null;
+      for (const section of sections) {
+        if (section.startLine <= i) {
+          currentSection = { title: section.title, anchor: section.anchor };
+        }
+      }
+
       // Get context: current line and surrounding lines
       const start = Math.max(0, i - 1);
       const end = Math.min(lines.length - 1, i + 1);
@@ -45,19 +82,24 @@ function searchInContent(
         .replace(/\*([^*]+)\*/g, "$1")
         .replace(/#{1,6}\s*/g, "")
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        .slice(0, 200);
+        .slice(0, 150);
       
-      if (cleanContext && !matches.includes(cleanContext)) {
-        matches.push(cleanContext);
+      // Avoid duplicate sections
+      const existingSection = matches.find(m => m.anchor === currentSection?.anchor);
+      if (cleanContext && !existingSection) {
+        matches.push({
+          text: cleanContext,
+          section: currentSection?.title || null,
+          anchor: currentSection?.anchor || null,
+        });
       }
       
-      if (matches.length >= 3) break;
+      if (matches.length >= 5) break;
     }
   }
 
   return {
     title,
-    content: content.slice(0, 500),
     source,
     href: `/docs/${source}`,
     matches,

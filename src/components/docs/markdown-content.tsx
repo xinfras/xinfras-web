@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
 import { cn } from "@/lib/utils";
 
 interface MarkdownContentProps {
@@ -13,7 +14,7 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
     <article
       className={cn(
         "prose max-w-none",
-        "prose-headings:font-semibold prose-headings:tracking-tight",
+        "prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-20",
         "prose-h1:text-3xl prose-h1:mt-0",
         "prose-h2:text-2xl prose-h2:mt-10 prose-h2:border-b prose-h2:border-border prose-h2:pb-2",
         "prose-h3:text-xl prose-h3:mt-8",
@@ -31,7 +32,10 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         className
       )}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+      <ReactMarkdown 
+        remarkPlugins={[remarkGfm]} 
+        rehypePlugins={[rehypeRaw, rehypeSlug]}
+      >
         {content}
       </ReactMarkdown>
     </article>

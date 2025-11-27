@@ -5,16 +5,24 @@ import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Search, FileText, Loader2, Cpu, Server, Wallet } from "lucide-react";
+import { Search, Loader2, Cpu, Server, Wallet, Hash } from "lucide-react";
 import { cn } from "@/lib/utils";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+
+interface SearchMatch {
+  text: string;
+  section: string | null;
+  anchor: string | null;
+}
 
 interface SearchResult {
   title: string;
   source: "ai-infra" | "svc-infra" | "fin-infra";
   href: string;
-  matches: string[];
+  matches: SearchMatch[];
 }
 
 const sourceIcons = {
@@ -40,6 +48,17 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
+
+  // Flatten results into selectable items (doc + individual sections)
+  const selectableItems = results.flatMap((result) => {
+    const items = [{ result, match: null as SearchMatch | null }];
+    result.matches.forEach((match) => {
+      if (match.anchor) {
+        items.push({ result, match });
+      }
+    });
+    return items;
+  });
 
   // Debounced search
   useEffect(() => {
@@ -80,30 +99,39 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
     (e: React.KeyboardEvent) => {
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((i) => (i < results.length - 1 ? i + 1 : i));
+        setSelectedIndex((i) => (i < selectableItems.length - 1 ? i + 1 : i));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedIndex((i) => (i > 0 ? i - 1 : i));
-      } else if (e.key === "Enter" && results.length > 0) {
+      } else if (e.key === "Enter" && selectableItems.length > 0) {
         e.preventDefault();
-        const selected = results[selectedIndex];
+        const selected = selectableItems[selectedIndex];
         if (selected) {
-          router.push(selected.href);
+          const href = selected.match?.anchor 
+            ? `${selected.result.href}#${selected.match.anchor}`
+            : selected.result.href;
+          router.push(href);
           onOpenChange(false);
         }
       }
     },
-    [results, selectedIndex, router, onOpenChange]
+    [selectableItems, selectedIndex, router, onOpenChange]
   );
 
-  const handleSelect = (result: SearchResult) => {
-    router.push(result.href);
+  const handleSelect = (href: string) => {
+    router.push(href);
     onOpenChange(false);
   };
 
+  let itemIndex = -1;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl gap-0 p-0 overflow-hidden">
+      <DialogContent className="max-w-2xl gap-0 p-0 overflow-hidden" showCloseButton={false}>
+        <VisuallyHidden.Root>
+          <DialogTitle>Search documentation</DialogTitle>
+        </VisuallyHidden.Root>
+        
         <div className="flex items-center border-b px-3">
           <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
           <Input
@@ -127,45 +155,60 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
               No results found for &quot;{query}&quot;
             </div>
           ) : (
-            <div className="p-2">
-              {results.map((result, index) => {
+            <div className="p-2 space-y-1">
+              {results.map((result) => {
                 const Icon = sourceIcons[result.source];
+                itemIndex++;
+                const docItemIndex = itemIndex;
+                
                 return (
-                  <button
-                    key={result.source}
-                    onClick={() => handleSelect(result)}
-                    className={cn(
-                      "flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors",
-                      index === selectedIndex
-                        ? "bg-accent"
-                        : "hover:bg-accent/50"
-                    )}
-                  >
-                    <div className={cn("mt-0.5", sourceColors[result.source])}>
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{result.title}</span>
-                        <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
-                          {result.source}
-                        </span>
-                      </div>
-                      {result.matches.length > 0 && (
-                        <div className="mt-1 space-y-1">
-                          {result.matches.slice(0, 2).map((match, i) => (
-                            <p
-                              key={i}
-                              className="text-sm text-muted-foreground line-clamp-1"
-                            >
-                              {match}
-                            </p>
-                          ))}
-                        </div>
+                  <div key={result.source} className="space-y-1">
+                    {/* Main doc result */}
+                    <button
+                      onClick={() => handleSelect(result.href)}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+                        docItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                       )}
-                    </div>
-                    <FileText className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                  </button>
+                    >
+                      <div className={cn(sourceColors[result.source])}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{result.title}</span>
+                          <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted">
+                            {result.source}
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Section matches */}
+                    {result.matches.filter(m => m.anchor).map((match, i) => {
+                      itemIndex++;
+                      const matchItemIndex = itemIndex;
+                      
+                      return (
+                        <button
+                          key={`${result.source}-${i}`}
+                          onClick={() => handleSelect(`${result.href}#${match.anchor}`)}
+                          className={cn(
+                            "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ml-4",
+                            matchItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
+                          )}
+                        >
+                          <Hash className="h-4 w-4 text-muted-foreground" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm">{match.section}</div>
+                            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                              {match.text}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 );
               })}
             </div>
