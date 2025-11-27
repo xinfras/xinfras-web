@@ -85,11 +85,26 @@ function searchInContent(
         .replace(/\*([^*]+)\*/g, "$1")
         .replace(/#{1,6}\s*/g, "")
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .trim()
         .slice(0, 150);
       
-      // Avoid duplicate sections
-      const existingSection = matches.find(m => m.anchor === currentSection?.anchor);
-      if (cleanContext && !existingSection) {
+      // Skip if context is too short or just whitespace/code markers
+      if (!cleanContext || cleanContext.length < 10 || cleanContext === "[code]") {
+        continue;
+      }
+
+      // Verify the cleaned context still contains our query (it might have been in a code block)
+      if (!cleanContext.toLowerCase().includes(lowerQuery)) {
+        continue;
+      }
+      
+      // Avoid duplicate matches (by section anchor or similar context text)
+      const existingMatch = matches.find(m => 
+        (m.anchor && m.anchor === currentSection?.anchor) || 
+        (m.text.slice(0, 50) === cleanContext.slice(0, 50))
+      );
+      
+      if (!existingMatch) {
         matches.push({
           text: cleanContext,
           section: currentSection?.title || null,
@@ -99,6 +114,11 @@ function searchInContent(
       
       if (matches.length >= 5) break;
     }
+  }
+
+  // Only return result if we have actual matches to show
+  if (matches.length === 0) {
+    return null;
   }
 
   return {
