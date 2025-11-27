@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Github, Moon, Sun, Command } from "lucide-react";
+import { Menu, Github, Moon, Sun, Command, Search } from "lucide-react";
 import { useState, useEffect } from "react";
+import { SearchDialog } from "@/components/search-dialog";
 
 const navigation = [
   { name: "Docs", href: "/docs" },
@@ -15,10 +16,23 @@ const navigation = [
 
 export function Header() {
   const [isDark, setIsDark] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const dark = document.documentElement.classList.contains("dark");
     setIsDark(dark);
+  }, []);
+
+  // Handle keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const toggleTheme = () => {
@@ -80,8 +94,10 @@ export function Header() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <Button
               variant="outline"
+              onClick={() => setSearchOpen(true)}
               className="relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64"
             >
+              <Search className="mr-2 h-4 w-4" />
               <span className="hidden lg:inline-flex">Search documentation...</span>
               <span className="inline-flex lg:hidden">Search...</span>
               <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
@@ -116,6 +132,7 @@ export function Header() {
           </nav>
         </div>
       </div>
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
   );
 }
