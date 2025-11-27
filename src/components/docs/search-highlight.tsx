@@ -12,6 +12,58 @@ export function SearchHighlight() {
       return;
     }
 
+    // Inject styles for the highlight animation
+    const styleId = "search-highlight-styles";
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        @keyframes highlightPulse {
+          0% { background-color: rgb(251 191 36 / 0.6); box-shadow: 0 0 0 0 rgb(251 191 36 / 0.4); }
+          50% { background-color: rgb(251 191 36 / 0.3); box-shadow: 0 0 0 4px rgb(251 191 36 / 0.2); }
+          100% { background-color: rgb(251 191 36 / 0.6); box-shadow: 0 0 0 0 rgb(251 191 36 / 0.4); }
+        }
+        @keyframes highlightFadeIn {
+          from { background-color: transparent; }
+          to { background-color: rgb(251 191 36 / 0.4); }
+        }
+        @keyframes highlightFadeOut {
+          from { background-color: rgb(251 191 36 / 0.4); }
+          to { background-color: transparent; }
+        }
+        .search-highlight {
+          background-color: rgb(251 191 36 / 0.4);
+          border-radius: 4px;
+          padding: 2px 6px;
+          margin: 0 -2px;
+          scroll-margin-top: 120px;
+          animation: highlightFadeIn 0.3s ease-out, highlightPulse 1.5s ease-in-out 0.3s 2;
+          transition: background-color 0.5s ease-out;
+        }
+        .search-highlight.fading {
+          animation: highlightFadeOut 0.5s ease-out forwards;
+        }
+        .search-highlight-code {
+          outline: 2px solid rgb(251 191 36 / 0.8);
+          outline-offset: 4px;
+          border-radius: 8px;
+          animation: highlightPulse 1.5s ease-in-out 2;
+          transition: outline-color 0.5s ease-out, outline-width 0.5s ease-out;
+        }
+        .search-highlight-code.fading {
+          outline-color: transparent;
+          outline-width: 0;
+        }
+        .dark .search-highlight {
+          background-color: rgb(251 191 36 / 0.3);
+        }
+        .dark .search-highlight-code {
+          outline-color: rgb(251 191 36 / 0.6);
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
     const findAndHighlight = () => {
       const article = document.querySelector("article");
       if (!article) {
@@ -67,7 +119,6 @@ export function SearchHighlight() {
 
           const mark = document.createElement("mark");
           mark.className = "search-highlight";
-          mark.style.cssText = "background-color: #fef08a; padding: 2px 4px; border-radius: 3px; scroll-margin-top: 120px;";
           mark.textContent = match;
           fragment.appendChild(mark);
 
@@ -99,12 +150,13 @@ export function SearchHighlight() {
             pre.scrollIntoView({ behavior: "smooth", block: "center" });
             
             if (pre instanceof HTMLElement) {
-              pre.style.outline = "3px solid #fbbf24";
-              pre.style.outlineOffset = "2px";
+              pre.classList.add("search-highlight-code");
               setTimeout(() => {
-                pre.style.outline = "";
-                pre.style.outlineOffset = "";
-              }, 5000);
+                pre.classList.add("fading");
+                setTimeout(() => {
+                  pre.classList.remove("search-highlight-code", "fading");
+                }, 500);
+              }, 4500);
             }
             found = true;
             break;
@@ -116,10 +168,13 @@ export function SearchHighlight() {
       setTimeout(() => {
         const highlights = document.querySelectorAll(".search-highlight");
         highlights.forEach((el) => {
-          const parent = el.parentNode;
-          if (parent) {
-            parent.replaceChild(document.createTextNode(el.textContent || ""), el);
-          }
+          el.classList.add("fading");
+          setTimeout(() => {
+            const parent = el.parentNode;
+            if (parent) {
+              parent.replaceChild(document.createTextNode(el.textContent || ""), el);
+            }
+          }, 500);
         });
         // Clean URL
         const url = new URL(window.location.href);
