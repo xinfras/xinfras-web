@@ -3,18 +3,20 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Menu, Github, Moon, Sun, Command, Search, FileText, Folder, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SearchDialog } from "@/components/search-dialog";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import type { DocsStructure, DocItem } from "@/lib/github";
 
@@ -22,63 +24,31 @@ interface HeaderClientProps {
   docsStructure: DocsStructure[];
 }
 
-function DocLink({
-  item,
-  packageName,
-}: {
-  item: DocItem;
-  packageName: string;
-}) {
-  const href = `/docs/${packageName}/${item.slug}`;
+function renderDocItems(items: DocItem[], packageName: string): React.ReactNode {
+  return items.map((item) => {
+    if (item.type === "dir" && item.children && item.children.length > 0) {
+      return (
+        <DropdownMenuSub key={item.path}>
+          <DropdownMenuSubTrigger>
+            <Folder className="mr-2 h-4 w-4" />
+            {item.title}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            {renderDocItems(item.children, packageName)}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      );
+    }
 
-  return (
-    <Link
-      href={href}
-      className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted"
-    >
-      <FileText className="h-4 w-4 text-muted-foreground" />
-      <span>{item.title}</span>
-    </Link>
-  );
-}
-
-function DocFolder({
-  item,
-  packageName,
-}: {
-  item: DocItem;
-  packageName: string;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="space-y-1">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
-      >
-        <Folder className="h-4 w-4 text-muted-foreground" />
-        <span className="flex-1 text-left">{item.title}</span>
-        <ChevronDown
-          className={cn(
-            "h-4 w-4 text-muted-foreground transition-transform",
-            isOpen && "rotate-180"
-          )}
-        />
-      </button>
-      {isOpen && item.children && (
-        <div className="ml-4 border-l border-border pl-2">
-          {item.children.map((child) =>
-            child.type === "dir" ? (
-              <DocFolder key={child.path} item={child} packageName={packageName} />
-            ) : (
-              <DocLink key={child.path} item={child} packageName={packageName} />
-            )
-          )}
-        </div>
-      )}
-    </div>
-  );
+    return (
+      <DropdownMenuItem key={item.path} asChild>
+        <Link href={`/docs/${packageName}/${item.slug}`}>
+          <FileText className="mr-2 h-4 w-4" />
+          {item.title}
+        </Link>
+      </DropdownMenuItem>
+    );
+  });
 }
 
 function PackageDropdown({ structure }: { structure: DocsStructure }) {
@@ -86,52 +56,30 @@ function PackageDropdown({ structure }: { structure: DocsStructure }) {
   const hasSubDocs = structure.items.length > 0;
 
   return (
-    <NavigationMenuItem>
-      <NavigationMenuTrigger className="h-9 bg-transparent">
-        {packageName}
-      </NavigationMenuTrigger>
-      <NavigationMenuContent>
-        <div className="w-80 p-4">
-          {/* Overview link */}
-          <Link
-            href={`/docs/${packageName}`}
-            className="mb-3 flex items-center gap-2 rounded-md bg-muted/50 px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
-            <FileText className="h-4 w-4" />
-            <span>Overview (README)</span>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-9 gap-1 px-3">
+          {packageName}
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-56">
+        <DropdownMenuItem asChild>
+          <Link href={`/docs/${packageName}`}>
+            <FileText className="mr-2 h-4 w-4" />
+            Overview (README)
           </Link>
+        </DropdownMenuItem>
 
-          {hasSubDocs ? (
-            <>
-              <div className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Documentation
-              </div>
-              <div className="max-h-80 space-y-1 overflow-y-auto">
-                {structure.items.map((item) =>
-                  item.type === "dir" ? (
-                    <DocFolder
-                      key={item.path}
-                      item={item}
-                      packageName={packageName}
-                    />
-                  ) : (
-                    <DocLink
-                      key={item.path}
-                      item={item}
-                      packageName={packageName}
-                    />
-                  )
-                )}
-              </div>
-            </>
-          ) : (
-            <p className="px-3 text-sm text-muted-foreground">
-              No additional documentation available.
-            </p>
-          )}
-        </div>
-      </NavigationMenuContent>
-    </NavigationMenuItem>
+        {hasSubDocs && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Documentation</DropdownMenuLabel>
+            {renderDocItems(structure.items, packageName)}
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -169,20 +117,14 @@ export function HeaderClient({ docsStructure }: HeaderClientProps) {
             <Command className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">xinfras</span>
           </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link href="/docs" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Docs
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              {docsStructure.map((structure) => (
-                <PackageDropdown key={structure.package} structure={structure} />
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+          <nav className="flex items-center">
+            <Button variant="ghost" asChild className="h-9 px-3">
+              <Link href="/docs">Docs</Link>
+            </Button>
+            {docsStructure.map((structure) => (
+              <PackageDropdown key={structure.package} structure={structure} />
+            ))}
+          </nav>
         </div>
 
         <Sheet>
