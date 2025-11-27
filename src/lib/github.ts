@@ -1,6 +1,22 @@
 const GITHUB_RAW_BASE = "https://raw.githubusercontent.com";
 const GITHUB_API_BASE = "https://api.github.com";
 
+// In-memory cache for API responses (works in both dev and production)
+const cache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+
+function getCached<T>(key: string): T | null {
+  const cached = cache.get(key);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data as T;
+  }
+  return null;
+}
+
+function setCache(key: string, data: unknown): void {
+  cache.set(key, { data, timestamp: Date.now() });
+}
+
 // Map of content sources - can point to different repos/branches
 export const contentSources = {
   "ai-infra": {
@@ -72,6 +88,14 @@ async function fetchDirectoryContents(
   path: string,
   branch: string
 ): Promise<{ name: string; path: string; type: string }[]> {
+  const cacheKey = `dir:${owner}/${repo}/${path}@${branch}`;
+  
+  // Check in-memory cache first
+  const cached = getCached<{ name: string; path: string; type: string }[]>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+  
   const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
   
   try {
@@ -96,7 +120,9 @@ async function fetchDirectoryContents(
       return [];
     }
     
-    return await response.json();
+    const data = await response.json();
+    setCache(cacheKey, data);
+    return data;
   } catch (error) {
     console.error(`Error fetching directory ${path}:`, error);
     return [];
@@ -200,18 +226,28 @@ export async function fetchDocContent(
 
 export async function fetchGitHubMarkdown(options: FetchOptions): Promise<string> {
   const { owner, repo, branch, path } = options;
+  const cacheKey = `md:${owner}/${repo}/${path}@${branch}`;
+  
+  // Check in-memory cache first
+  const cached = getCached<string>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+  
   const url = `${GITHUB_RAW_BASE}/${owner}/${repo}/${branch}/${path}`;
   
   try {
     const response = await fetch(url, {
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
+      next: { revalidate: 3600 }, // Revalidate every hour
     });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.status}`);
     }
     
-    return await response.text();
+    const content = await response.text();
+    setCache(cacheKey, content);
+    return content;
   } catch (error) {
     console.error(`Error fetching markdown from ${url}:`, error);
     throw error;
