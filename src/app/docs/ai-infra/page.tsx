@@ -17,13 +17,15 @@ export default async function AIInfraPage() {
   const content = await getContent();
 
   const header = (
-    <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-primary/10 p-2">
-        <Cpu className="h-6 w-6 text-primary" />
+    <div className="space-y-3">
+      <div className="flex items-center gap-3">
+        <div className="rounded-lg bg-blue-500/10 p-2">
+          <Cpu className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        </div>
+        <Badge variant="secondary">ai-infra</Badge>
       </div>
-      <Badge variant="outline" className="text-primary">
-        AI Infrastructure
-      </Badge>
+      <h1 className="text-3xl font-bold tracking-tight">AI Infrastructure</h1>
+      <p className="text-muted-foreground">LLM orchestration, MCP servers, and agent frameworks for intelligent applications.</p>
     </div>
   );
 

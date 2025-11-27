@@ -17,13 +17,15 @@ export default async function SvcInfraPage() {
   const content = await getContent();
 
   const header = (
-    <div className="flex items-center gap-3">
-      <div className="rounded-lg bg-primary/10 p-2">
-        <Server className="h-6 w-6 text-primary" />
+    <div className="space-y-3">
+      <div className="flex items-center gap-3">
+        <div className="rounded-lg bg-violet-500/10 p-2">
+          <Server className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+        </div>
+        <Badge variant="secondary">svc-infra</Badge>
       </div>
-      <Badge variant="outline" className="text-primary">
-        Backend Infrastructure
-      </Badge>
+      <h1 className="text-3xl font-bold tracking-tight">Service Infrastructure</h1>
+      <p className="text-muted-foreground">Production-ready backend infrastructure with auth, database, caching, and jobs.</p>
     </div>
   );
 

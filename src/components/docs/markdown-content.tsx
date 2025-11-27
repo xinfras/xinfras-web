@@ -10,6 +10,12 @@ interface MarkdownContentProps {
   className?: string;
 }
 
+// Remove the first H1 from markdown content since we show it in the header
+function removeFirstH1(content: string): string {
+  // Match the first line that starts with "# " (H1 heading)
+  return content.replace(/^#\s+.+\n+/, "");
+}
+
 // Custom components to handle code blocks properly
 const components: Components = {
   pre: ({ children, ...props }) => (
@@ -40,6 +46,8 @@ const components: Components = {
 };
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
+  const processedContent = removeFirstH1(content);
+  
   return (
     <article
       className={cn(
@@ -64,7 +72,7 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={components}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </article>
   );
