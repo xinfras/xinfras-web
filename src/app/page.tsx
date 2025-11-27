@@ -130,9 +130,9 @@ export default function Home() {
                 <div className="mt-10 inline-flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm">
                   <span className="text-muted-foreground">$</span>
                   <span>pip install ai-infra svc-infra fin-infra</span>
-                  <button className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-foreground">
                     <Copy className="h-4 w-4" />
-                  </button>
+                  </Button>
                 </div>
 
               </div>

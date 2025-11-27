@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Loader2, Cpu, Server, Wallet, Hash } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -177,10 +178,11 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                 return (
                   <div key={result.href} className="space-y-1">
                     {/* Main doc result */}
-                    <button
+                    <Button
+                      variant="ghost"
                       onClick={() => handleSelect(result.href, query)}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+                        "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2.5 text-left",
                         docItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                       )}
                     >
@@ -195,7 +197,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                           </span>
                         </div>
                       </div>
-                    </button>
+                    </Button>
 
                     {/* Section matches */}
                     {result.matches.filter(m => m.anchor).map((match, i) => {
@@ -203,11 +205,12 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                       const matchItemIndex = itemIndex;
                       
                       return (
-                        <button
+                        <Button
                           key={`${result.source}-${i}`}
+                          variant="ghost"
                           onClick={() => handleSelect(`${result.href}#${match.anchor}`, query)}
                           className={cn(
-                            "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ml-4",
+                            "flex w-full h-auto items-center justify-start gap-3 rounded-lg px-3 py-2 text-left ml-4",
                             matchItemIndex === selectedIndex ? "bg-accent" : "hover:bg-accent/50"
                           )}
                         >
@@ -218,7 +221,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                               {match.text}
                             </p>
                           </div>
-                        </button>
+                        </Button>
                       );
                     })}
                   </div>
