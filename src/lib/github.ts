@@ -8,21 +8,21 @@ export const contentSources = {
     repo: "ai-infra", 
     branch: "main",
     path: "README.md",
-    docsPath: "src/ai_infra/docs",
+    docsPath: "docs",
   },
   "svc-infra": {
     owner: "aliikhatami94",
     repo: "svc-infra",
     branch: "main", 
     path: "README.md",
-    docsPath: "src/svc_infra/docs",
+    docsPath: "docs",
   },
   "fin-infra": {
     owner: "aliikhatami94",
     repo: "fin-infra",
     branch: "main",
     path: "README.md",
-    docsPath: "src/fin_infra/docs",
+    docsPath: "docs",
   },
 } as const;
 

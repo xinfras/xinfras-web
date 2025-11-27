@@ -19,9 +19,11 @@ export function DocsPageContent({ content, header }: DocsPageContentProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="min-w-0 flex-1 space-y-6">
-        {header}
-        <MarkdownContent content={content} />
+      <div className="min-w-0 flex-1">
+        <div className="space-y-6">
+          <div>{header}</div>
+          <MarkdownContent content={content} />
+        </div>
       </div>
     </div>
   );
