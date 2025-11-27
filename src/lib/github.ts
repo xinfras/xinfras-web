@@ -1,4 +1,5 @@
 const GITHUB_RAW_BASE = "https://raw.githubusercontent.com";
+const GITHUB_API_BASE = "https://api.github.com";
 
 // Map of content sources - can point to different repos/branches
 export const contentSources = {
@@ -7,18 +8,21 @@ export const contentSources = {
     repo: "ai-infra", 
     branch: "main",
     path: "README.md",
+    docsPath: "src/ai_infra/docs",
   },
   "svc-infra": {
     owner: "aliikhatami94",
     repo: "svc-infra",
     branch: "main", 
     path: "README.md",
+    docsPath: "src/svc_infra/docs",
   },
   "fin-infra": {
     owner: "aliikhatami94",
     repo: "fin-infra",
     branch: "main",
     path: "README.md",
+    docsPath: "src/fin_infra/docs",
   },
 } as const;
 
@@ -29,6 +33,166 @@ interface FetchOptions {
   repo: string;
   branch: string;
   path: string;
+}
+
+export interface DocItem {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+  slug: string;
+  title: string;
+  children?: DocItem[];
+}
+
+export interface DocsStructure {
+  package: ContentSource;
+  items: DocItem[];
+}
+
+// Convert filename to readable title
+function fileToTitle(filename: string): string {
+  return filename
+    .replace(/\.md$/, "")
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+// Convert path to URL slug
+function pathToSlug(path: string, docsPath: string): string {
+  return path
+    .replace(docsPath + "/", "")
+    .replace(/\.md$/, "")
+    .toLowerCase();
+}
+
+// Fetch directory contents from GitHub API
+async function fetchDirectoryContents(
+  owner: string,
+  repo: string,
+  path: string,
+  branch: string
+): Promise<{ name: string; path: string; type: string }[]> {
+  const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github.v3+json",
+        // Add token if available for higher rate limits
+        ...(process.env.GITHUB_TOKEN && {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        }),
+      },
+      next: { revalidate: 300 },
+    });
+    
+    if (!response.ok) {
+      if (response.status === 404) {
+        return [];
+      }
+      throw new Error(`Failed to fetch directory: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching directory ${path}:`, error);
+    return [];
+  }
+}
+
+// Recursively fetch docs structure
+async function fetchDocsRecursive(
+  owner: string,
+  repo: string,
+  path: string,
+  branch: string,
+  docsPath: string
+): Promise<DocItem[]> {
+  const contents = await fetchDirectoryContents(owner, repo, path, branch);
+  const items: DocItem[] = [];
+  
+  for (const item of contents) {
+    // Only process markdown files and directories
+    if (item.type === "file" && !item.name.endsWith(".md")) {
+      continue;
+    }
+    
+    const docItem: DocItem = {
+      name: item.name,
+      path: item.path,
+      type: item.type as "file" | "dir",
+      slug: pathToSlug(item.path, docsPath),
+      title: fileToTitle(item.name),
+    };
+    
+    if (item.type === "dir") {
+      docItem.children = await fetchDocsRecursive(
+        owner,
+        repo,
+        item.path,
+        branch,
+        docsPath
+      );
+      // Only include directories that have markdown files
+      if (docItem.children.length > 0) {
+        items.push(docItem);
+      }
+    } else {
+      items.push(docItem);
+    }
+  }
+  
+  // Sort: directories first, then files, alphabetically
+  return items.sort((a, b) => {
+    if (a.type !== b.type) {
+      return a.type === "dir" ? -1 : 1;
+    }
+    return a.title.localeCompare(b.title);
+  });
+}
+
+// Fetch docs structure for a package
+export async function fetchDocsStructure(
+  source: ContentSource
+): Promise<DocsStructure> {
+  const config = contentSources[source];
+  const items = await fetchDocsRecursive(
+    config.owner,
+    config.repo,
+    config.docsPath,
+    config.branch,
+    config.docsPath
+  );
+  
+  return {
+    package: source,
+    items,
+  };
+}
+
+// Fetch all packages' docs structure
+export async function fetchAllDocsStructure(): Promise<DocsStructure[]> {
+  const packages = Object.keys(contentSources) as ContentSource[];
+  const structures = await Promise.all(
+    packages.map((pkg) => fetchDocsStructure(pkg))
+  );
+  return structures;
+}
+
+// Fetch a specific doc file content
+export async function fetchDocContent(
+  source: ContentSource,
+  docSlug: string
+): Promise<string> {
+  const config = contentSources[source];
+  const path = `${config.docsPath}/${docSlug}.md`;
+  
+  return fetchGitHubMarkdown({
+    owner: config.owner,
+    repo: config.repo,
+    branch: config.branch,
+    path,
+  });
 }
 
 export async function fetchGitHubMarkdown(options: FetchOptions): Promise<string> {
