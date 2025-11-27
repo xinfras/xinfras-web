@@ -87,10 +87,12 @@ async function fetchDirectoryContents(
     });
     
     if (!response.ok) {
-      if (response.status === 404) {
+      // Return empty for 404 (not found) or 403 (rate limited)
+      if (response.status === 404 || response.status === 403) {
         return [];
       }
-      throw new Error(`Failed to fetch directory: ${response.status}`);
+      console.error(`Failed to fetch directory ${path}: ${response.status}`);
+      return [];
     }
     
     return await response.json();
