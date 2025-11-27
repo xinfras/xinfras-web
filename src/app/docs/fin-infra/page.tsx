@@ -1,8 +1,21 @@
 import { Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import Content from "@/content/docs/fin-infra.mdx";
+import { MarkdownContent } from "@/components/docs/markdown-content";
+import { fetchDocsContent, fallbackContent } from "@/lib/github";
 
-export default function FinInfraPage() {
+export const revalidate = 300; // Revalidate every 5 minutes
+
+async function getContent() {
+  try {
+    return await fetchDocsContent("fin-infra");
+  } catch {
+    return fallbackContent["fin-infra"];
+  }
+}
+
+export default async function FinInfraPage() {
+  const content = await getContent();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
@@ -13,10 +26,8 @@ export default function FinInfraPage() {
           Financial Infrastructure
         </Badge>
       </div>
-      
-      <article className="prose prose-neutral dark:prose-invert max-w-none prose-headings:scroll-mt-20 prose-pre:bg-muted prose-pre:border prose-pre:border-border">
-        <Content />
-      </article>
+
+      <MarkdownContent content={content} />
     </div>
   );
 }
