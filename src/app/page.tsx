@@ -111,17 +111,17 @@ export default function Home() {
                 </p>
                 
                 {/* CTA buttons */}
-                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button size="lg" className="h-12 px-8 text-base" asChild>
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Button asChild>
                     <Link href="/docs">
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="h-12 px-8 text-base" asChild>
+                  <Button variant="outline" asChild>
                     <a href="https://github.com/xinfras" target="_blank" rel="noreferrer">
                       <Github className="mr-2 h-4 w-4" />
-                      View on GitHub
+                      GitHub
                     </a>
                   </Button>
                 </div>
@@ -325,16 +325,16 @@ export default function Home() {
                     Join developers who are shipping faster with our infrastructure frameworks.
                   </p>
                   
-                  <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button size="lg" className="h-12 px-8 text-base" asChild>
+                  <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Button asChild>
                       <Link href="/docs">
                         Start Building
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button size="lg" variant="ghost" className="h-12 px-8 text-base" asChild>
+                    <Button variant="outline" asChild>
                       <Link href="/docs">
-                        Read Documentation
+                        Documentation
                       </Link>
                     </Button>
                   </div>
