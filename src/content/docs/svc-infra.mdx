@@ -1,0 +1,156 @@
+# svc-infra
+
+Production-ready backend infrastructure with authentication, database integration, caching, job queues, and comprehensive observability.
+
+## Installation
+
+```bash
+pip install svc-infra
+```
+
+Or with Poetry:
+
+```bash
+poetry add svc-infra
+```
+
+## Quick Example
+
+Build a complete API in minutes:
+
+```python
+from svc_infra import App, Router
+
+app = App()
+router = Router()
+
+@router.get("/users/{user_id}")
+async def get_user(user_id: int):
+    return {"id": user_id, "name": "Alice"}
+
+@router.post("/users")
+async def create_user(name: str, email: str):
+    return {"id": 1, "name": name, "email": email}
+
+app.include_router(router)
+```
+
+## Features
+
+### API Framework
+
+Build REST APIs with automatic OpenAPI documentation, request validation, and error handling.
+
+```python
+from svc_infra import App, Router
+from pydantic import BaseModel
+
+class User(BaseModel):
+    name: str
+    email: str
+
+router = Router(prefix="/api/v1")
+
+@router.post("/users", response_model=User)
+async def create_user(user: User):
+    return user
+```
+
+### Authentication & Authorization
+
+JWT authentication, OAuth providers, API keys, and role-based access control out of the box.
+
+```python
+from svc_infra.auth import jwt_required, has_role
+
+@router.get("/admin/users")
+@jwt_required
+@has_role("admin")
+async def list_users(current_user: User):
+    return await User.all()
+```
+
+### Database Integration
+
+Async SQLAlchemy with migrations, connection pooling, and transaction management.
+
+```python
+from svc_infra.db import Database, Model
+
+class User(Model):
+    __tablename__ = "users"
+    
+    id: int
+    name: str
+    email: str
+
+db = Database("postgresql://...")
+await db.connect()
+```
+
+### Caching
+
+Redis integration with decorators for automatic caching.
+
+```python
+from svc_infra.cache import cache, Cache
+
+cache = Cache("redis://localhost")
+
+@cache(ttl=300)
+async def get_user(user_id: int):
+    return await db.get(User, user_id)
+```
+
+### Job Queues
+
+Background processing with retries, scheduling, and monitoring.
+
+```python
+from svc_infra.jobs import job, JobQueue
+
+queue = JobQueue("redis://localhost")
+
+@job(queue="emails", retries=3)
+async def send_welcome_email(user_id: int):
+    user = await get_user(user_id)
+    await email.send(user.email, "Welcome!")
+```
+
+### Observability
+
+Built-in logging, metrics, and distributed tracing.
+
+```python
+from svc_infra.logging import logger
+from svc_infra.metrics import counter, histogram
+
+request_count = counter("http_requests_total")
+latency = histogram("http_request_duration_seconds")
+
+@router.get("/health")
+async def health():
+    request_count.inc()
+    return {"status": "healthy"}
+```
+
+## Architecture
+
+svc-infra follows a modular architecture where each component can be used independently:
+
+| Component | Description |
+|-----------|-------------|
+| `App` | Core application with lifecycle management |
+| `Router` | HTTP routing with middleware support |
+| `Database` | Async database with connection pooling |
+| `Cache` | Redis-based caching layer |
+| `JobQueue` | Background job processing |
+| `Auth` | Authentication and authorization |
+
+## Next Steps
+
+- [API Framework Guide](/docs/svc-infra/api)
+- [Authentication Setup](/docs/svc-infra/auth)
+- [Database Configuration](/docs/svc-infra/database)
+- [Caching Strategies](/docs/svc-infra/caching)
+- [Job Queue Patterns](/docs/svc-infra/jobs)

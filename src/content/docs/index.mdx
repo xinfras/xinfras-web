@@ -1,0 +1,121 @@
+# Getting Started
+
+Welcome to xinfras! This guide will help you get started with our infrastructure frameworks.
+
+## Overview
+
+xinfras provides three production-ready Python frameworks:
+
+- **ai-infra** — LLM orchestration, MCP servers, and agent frameworks
+- **svc-infra** — Backend infrastructure with auth, database, caching, and jobs
+- **fin-infra** — Billing infrastructure for payments and subscriptions
+
+Each framework can be used independently or combined for full-stack applications.
+
+## Installation
+
+Install all three frameworks:
+
+```bash
+pip install ai-infra svc-infra fin-infra
+```
+
+Or install individually:
+
+```bash
+pip install ai-infra    # AI/LLM capabilities
+pip install svc-infra   # Backend services
+pip install fin-infra   # Billing/payments
+```
+
+## Quick Start
+
+Here's a simple example combining all three frameworks:
+
+```python
+from svc_infra import App, Router
+from ai_infra import AgentGraph
+from fin_infra import Billing
+
+# Create the app
+app = App()
+
+# Set up AI capabilities
+graph = AgentGraph("assistant")
+
+@graph.tool
+def search_docs(query: str) -> str:
+    """Search documentation."""
+    return f"Results for: {query}"
+
+# Set up billing
+billing = Billing(app)
+
+# Create API routes
+router = Router()
+
+@router.post("/chat")
+async def chat(message: str, user_id: str):
+    # Check subscription
+    if not await billing.has_active_subscription(user_id):
+        return {"error": "Subscription required"}
+    
+    # Run AI agent
+    response = await graph.run(message)
+    return {"response": response}
+
+app.include_router(router)
+```
+
+## Framework Guides
+
+### ai-infra
+
+Build intelligent applications with:
+
+- Multi-provider LLM support (OpenAI, Anthropic, etc.)
+- Agent graphs for complex workflows
+- MCP server development
+- Tool execution framework
+
+[Read the ai-infra docs →](/docs/ai-infra)
+
+### svc-infra
+
+Production-ready backend with:
+
+- Fast async API framework
+- JWT/OAuth authentication
+- Database with migrations
+- Redis caching
+- Background job queues
+
+[Read the svc-infra docs →](/docs/svc-infra)
+
+### fin-infra
+
+Complete billing infrastructure:
+
+- Stripe integration
+- Subscription management
+- Usage-based billing
+- Invoice generation
+- Webhook handling
+
+[Read the fin-infra docs →](/docs/fin-infra)
+
+## Requirements
+
+- Python 3.11 or higher
+- Redis (for caching and job queues)
+- PostgreSQL (recommended for production)
+
+## Community
+
+- [GitHub](https://github.com/xinfras) — Source code and issues
+- [Discord](https://discord.gg/xinfras) — Community chat
+- [Twitter](https://twitter.com/xinfras) — Updates and announcements
+
+## License
+
+All frameworks are open source under the MIT License.

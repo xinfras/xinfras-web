@@ -1,0 +1,114 @@
+# ai-infra
+
+Build intelligent AI-powered applications with LLM orchestration, agent frameworks, MCP servers, and powerful tool execution capabilities.
+
+## Installation
+
+```bash
+pip install ai-infra
+```
+
+Or with Poetry:
+
+```bash
+poetry add ai-infra
+```
+
+## Quick Example
+
+Create an AI agent in just a few lines of code:
+
+```python
+from ai_infra import AgentGraph, LLM
+
+# Initialize the LLM
+llm = LLM("gpt-4")
+
+# Create an agent graph
+graph = AgentGraph("assistant")
+
+# Add tools
+@graph.tool
+def search_docs(query: str) -> str:
+    """Search the documentation."""
+    return f"Results for: {query}"
+
+# Run the agent
+response = await graph.run("Help me find the auth docs")
+```
+
+## Features
+
+### LLM Orchestration
+
+Seamlessly integrate with OpenAI, Anthropic, and other LLM providers with built-in retry logic and streaming.
+
+```python
+from ai_infra import LLM
+
+llm = LLM("claude-3-opus")
+response = await llm.chat("Explain quantum computing")
+
+# With streaming
+async for chunk in llm.stream("Write a poem"):
+    print(chunk, end="")
+```
+
+### Agent Graphs
+
+Build complex agent workflows with directed graphs, conditional branching, and state management.
+
+```python
+from ai_infra import AgentGraph, Node
+
+graph = AgentGraph("workflow")
+
+@graph.node
+async def analyze(state):
+    return {"analysis": "..."}
+
+@graph.node  
+async def decide(state):
+    if state["analysis"]:
+        return "process"
+    return "fallback"
+
+graph.add_edge("analyze", "decide")
+```
+
+### MCP Servers
+
+Create Model Context Protocol servers for tools, resources, and prompts with minimal boilerplate.
+
+```python
+from ai_infra.mcp import MCPServer
+
+server = MCPServer("my-tools")
+
+@server.tool
+def calculator(expression: str) -> float:
+    """Evaluate a math expression."""
+    return eval(expression)
+
+server.run()
+```
+
+### Tool Execution
+
+Define and execute tools with automatic schema generation, validation, and error handling.
+
+```python
+from ai_infra import tool
+
+@tool
+def get_weather(city: str, units: str = "celsius") -> dict:
+    """Get current weather for a city."""
+    return {"temp": 22, "condition": "sunny"}
+```
+
+## Next Steps
+
+- [LLM Orchestration Guide](/docs/ai-infra/llm)
+- [Building Agent Graphs](/docs/ai-infra/graphs)
+- [MCP Server Development](/docs/ai-infra/mcp)
+- [Tool Execution](/docs/ai-infra/tools)
