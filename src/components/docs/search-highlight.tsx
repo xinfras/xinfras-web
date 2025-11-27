@@ -19,46 +19,37 @@ export function SearchHighlight() {
       style.id = styleId;
       style.textContent = `
         @keyframes highlightPulse {
-          0% { background-color: rgb(251 191 36 / 0.6); box-shadow: 0 0 0 0 rgb(251 191 36 / 0.4); }
-          50% { background-color: rgb(251 191 36 / 0.3); box-shadow: 0 0 0 4px rgb(251 191 36 / 0.2); }
-          100% { background-color: rgb(251 191 36 / 0.6); box-shadow: 0 0 0 0 rgb(251 191 36 / 0.4); }
+          0%, 100% { background-color: hsl(var(--primary) / 0.15); }
+          50% { background-color: hsl(var(--primary) / 0.25); }
         }
         @keyframes highlightFadeIn {
           from { background-color: transparent; }
-          to { background-color: rgb(251 191 36 / 0.4); }
+          to { background-color: hsl(var(--primary) / 0.2); }
         }
         @keyframes highlightFadeOut {
-          from { background-color: rgb(251 191 36 / 0.4); }
+          from { background-color: hsl(var(--primary) / 0.2); }
           to { background-color: transparent; }
         }
         .search-highlight {
-          background-color: rgb(251 191 36 / 0.4);
-          border-radius: 4px;
-          padding: 2px 6px;
-          margin: 0 -2px;
+          background-color: hsl(var(--primary) / 0.2);
+          border-radius: 3px;
+          padding: 1px 3px;
+          margin: 0 -1px;
           scroll-margin-top: 120px;
-          animation: highlightFadeIn 0.3s ease-out, highlightPulse 1.5s ease-in-out 0.3s 2;
+          animation: highlightFadeIn 0.3s ease-out, highlightPulse 2s ease-in-out 0.3s 2;
           transition: background-color 0.5s ease-out;
         }
         .search-highlight.fading {
           animation: highlightFadeOut 0.5s ease-out forwards;
         }
         .search-highlight-code {
-          outline: 2px solid rgb(251 191 36 / 0.8);
-          outline-offset: 4px;
+          background-color: hsl(var(--primary) / 0.08);
           border-radius: 8px;
-          animation: highlightPulse 1.5s ease-in-out 2;
-          transition: outline-color 0.5s ease-out, outline-width 0.5s ease-out;
+          animation: highlightPulse 2s ease-in-out 2;
+          transition: background-color 0.5s ease-out;
         }
         .search-highlight-code.fading {
-          outline-color: transparent;
-          outline-width: 0;
-        }
-        .dark .search-highlight {
-          background-color: rgb(251 191 36 / 0.3);
-        }
-        .dark .search-highlight-code {
-          outline-color: rgb(251 191 36 / 0.6);
+          background-color: transparent;
         }
       `;
       document.head.appendChild(style);
