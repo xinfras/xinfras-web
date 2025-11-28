@@ -176,7 +176,7 @@ export function MarkdownContent({ content, className, packageName }: MarkdownCon
         "prose-blockquote:border-l-2 prose-blockquote:border-border prose-blockquote:not-italic",
         "prose-ul:my-4 prose-ol:my-4",
         "prose-li:my-1",
-        "prose-pre:my-0 prose-pre:px-4 prose-pre:py-2 prose-pre:bg-transparent",
+        "prose-pre:my-0 prose-pre:px-4 prose-pre:py-2 prose-pre:bg-transparent prose-pre:rounded-none",
         "prose-table:my-0",
         className
       )}

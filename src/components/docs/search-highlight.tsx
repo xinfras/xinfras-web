@@ -32,7 +32,7 @@ export function SearchHighlight() {
         }
         .search-highlight {
           background-color: rgb(253 224 71 / 0.4);
-          border-radius: 3px;
+          border-radius: 0;
           padding: 1px 3px;
           margin: 0 -1px;
           scroll-margin-top: 120px;
@@ -44,7 +44,7 @@ export function SearchHighlight() {
         }
         .search-highlight-code {
           background-color: rgb(253 224 71 / 0.15);
-          border-radius: 8px;
+          border-radius: 0;
           animation: highlightPulse 2s ease-in-out 2;
           transition: background-color 0.5s ease-out;
         }
