@@ -55,7 +55,7 @@ function CodeBlock({ children, className }: { children: string; className?: stri
         </button>
       </div>
       {/* Code content */}
-      <pre className="overflow-x-auto p-4 bg-muted/50">
+      <pre className="overflow-x-auto px-4 py-2 bg-muted/50">
         <code className="text-sm leading-relaxed text-foreground font-mono">
           {children}
         </code>
