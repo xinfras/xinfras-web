@@ -31,7 +31,7 @@ function CodeBlock({ children, className }: { children: string; className?: stri
   };
 
   return (
-    <div className="group relative my-5 overflow-hidden rounded-lg border border-border bg-muted">
+    <div className="group relative overflow-hidden rounded-lg border border-border bg-muted">
       {/* Header bar */}
       <div className="flex items-center justify-between border-b border-border bg-muted px-4 py-2">
         <span className="text-xs font-medium text-muted-foreground">
@@ -90,7 +90,7 @@ const components: Components = {
     return <code className={className} {...props}>{children}</code>;
   },
   table: ({ children, ...props }) => (
-    <div className="my-4 overflow-x-auto rounded-lg border border-border">
+    <div className="overflow-x-auto rounded-lg border border-border">
       <table className="w-full border-collapse text-sm" {...props}>{children}</table>
     </div>
   ),
@@ -124,6 +124,8 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         "prose-blockquote:border-l-2 prose-blockquote:border-border prose-blockquote:not-italic",
         "prose-ul:my-4 prose-ol:my-4",
         "prose-li:my-1",
+        "prose-pre:my-0 prose-pre:px-4 prose-pre:py-2 prose-pre:bg-transparent",
+        "prose-table:my-0",
         className
       )}
     >
