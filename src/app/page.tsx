@@ -27,19 +27,19 @@ const frameworks = [
     name: "ai-infra",
     description: "LLM orchestration, MCP servers, and agent frameworks.",
     icon: Cpu,
-    href: "/docs/ai-infra",
+    href: "/ai-infra",
   },
   {
     name: "svc-infra", 
     description: "Backend infrastructure with auth, database, and jobs.",
     icon: Server,
-    href: "/docs/svc-infra",
+    href: "/svc-infra",
   },
   {
     name: "fin-infra",
     description: "Billing infrastructure for payments and subscriptions.",
     icon: Wallet,
-    href: "/docs/fin-infra",
+    href: "/fin-infra",
   },
 ];
 

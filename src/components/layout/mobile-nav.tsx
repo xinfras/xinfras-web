@@ -127,7 +127,7 @@ function DocItemLink({
 
   return (
     <NavLink
-      href={`/docs/${packageName}/${item.slug}`}
+      href={`/${packageName}/${item.slug}`}
       icon={<FileText className="h-4 w-4" />}
       onClose={onClose}
     >
@@ -219,7 +219,7 @@ export function MobileNav({
                 icon={<Folder className="h-4 w-4 text-muted-foreground" />}
               >
                 <NavLink
-                  href={`/docs/${structure.package}`}
+                  href={`/${structure.package}`}
                   icon={<FileText className="h-4 w-4" />}
                   onClose={handleClose}
                 >

@@ -73,9 +73,9 @@ app.include_router(router)
 
 Choose a framework to get started:
 
-- [ai-infra](/docs/ai-infra) — Build intelligent AI applications
-- [svc-infra](/docs/svc-infra) — Production-ready backend services
-- [fin-infra](/docs/fin-infra) — Complete billing infrastructure
+- [ai-infra](/ai-infra) — Build intelligent AI applications
+- [svc-infra](/svc-infra) — Production-ready backend services
+- [fin-infra](/fin-infra) — Complete billing infrastructure
 
 ## Requirements
 

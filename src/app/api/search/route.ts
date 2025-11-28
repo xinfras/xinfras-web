@@ -42,7 +42,7 @@ function searchInContent(
   // Extract title from first H1 or use custom title
   const titleMatch = content.match(/^#\s+(.+)$/m);
   const title = customTitle || (titleMatch ? titleMatch[1] : source);
-  const href = customHref || `/docs/${source}`;
+  const href = customHref || `/${source}`;
 
   // Parse sections from headings
   const lines = content.split("\n");
@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
       docs.map(async (doc) => {
         try {
           const content = await fetchDocContent(structure.package, doc.slug);
-          const href = `/docs/${structure.package}/${doc.slug}`;
+          const href = `/${structure.package}/${doc.slug}`;
           const result = searchInContent(content, query, structure.package, href, doc.title);
           if (result) {
             results.push(result);

@@ -41,7 +41,7 @@ function renderDocItems(items: DocItem[], packageName: string): React.ReactNode 
 
     return (
       <DropdownMenuItem key={item.path} asChild>
-        <Link href={`/docs/${packageName}/${item.slug}`}>
+        <Link href={`/${packageName}/${item.slug}`}>
           <FileText className="mr-2 h-4 w-4" />
           {item.title}
         </Link>
@@ -64,7 +64,7 @@ function PackageDropdown({ structure }: { structure: DocsStructure }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56 max-h-96 overflow-y-auto">
         <DropdownMenuItem asChild>
-          <Link href={`/docs/${packageName}`}>
+          <Link href={`/${packageName}`}>
             <FileText className="mr-2 h-4 w-4" />
             Overview (README)
           </Link>
