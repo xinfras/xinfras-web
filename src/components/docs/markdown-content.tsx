@@ -89,6 +89,11 @@ const components: Components = {
     }
     return <code className={className} {...props}>{children}</code>;
   },
+  table: ({ children, ...props }) => (
+    <div className="my-6 w-full overflow-x-auto">
+      <table {...props}>{children}</table>
+    </div>
+  ),
 };
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
