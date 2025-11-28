@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 interface Point {
   x: number;
@@ -11,6 +11,38 @@ interface Point {
   baseY: number;
 }
 
+// Static gradient background for mobile/touch devices
+function MobileBackground() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+      {/* Subtle gradient orbs that slowly animate */}
+      <div 
+        className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 rounded-full opacity-[0.15] blur-3xl animate-pulse"
+        style={{ 
+          background: "radial-gradient(circle, rgba(100, 120, 180, 0.4) 0%, transparent 70%)",
+          animationDuration: "8s"
+        }}
+      />
+      <div 
+        className="absolute top-1/3 -right-1/4 w-2/3 h-2/3 rounded-full opacity-[0.12] blur-3xl animate-pulse"
+        style={{ 
+          background: "radial-gradient(circle, rgba(80, 100, 160, 0.4) 0%, transparent 70%)",
+          animationDuration: "10s",
+          animationDelay: "2s"
+        }}
+      />
+      <div 
+        className="absolute -bottom-1/4 left-1/4 w-1/2 h-1/2 rounded-full opacity-[0.1] blur-3xl animate-pulse"
+        style={{ 
+          background: "radial-gradient(circle, rgba(90, 110, 170, 0.4) 0%, transparent 70%)",
+          animationDuration: "12s",
+          animationDelay: "4s"
+        }}
+      />
+    </div>
+  );
+}
+
 export function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -18,6 +50,20 @@ export function InteractiveBackground() {
   const pointsRef = useRef<Point[]>([]);
   const animationRef = useRef<number | null>(null);
   const dimensionsRef = useRef({ width: 0, height: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if device is touch-based / mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 768;
+      setIsMobile(hasTouchScreen || isSmallScreen);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const initPoints = useCallback((width: number, height: number) => {
     // More points for taller pages
@@ -37,6 +83,9 @@ export function InteractiveBackground() {
   }, []);
 
   useEffect(() => {
+    // Skip canvas animation on mobile/touch devices
+    if (isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -208,7 +257,12 @@ export function InteractiveBackground() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [initPoints]);
+  }, [initPoints, isMobile]);
+
+  // Show static gradient on mobile/touch devices
+  if (isMobile) {
+    return <MobileBackground />;
+  }
 
   return (
     <canvas
