@@ -67,16 +67,11 @@ function CollapsibleSection({
           )}
         />
       </button>
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-200",
-          isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
-        )}
-      >
+      {isOpen && (
         <div className="ml-4 space-y-0.5 border-l border-border pl-3 pt-1">
           {children}
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -194,9 +189,6 @@ export function MobileNav({
           >
             <Search className="h-4 w-4" />
             <span>Search docs...</span>
-            <kbd className="ml-auto rounded border bg-background px-1.5 py-0.5 text-[10px] font-medium">
-              ⌘K
-            </kbd>
           </Button>
         </div>
 
