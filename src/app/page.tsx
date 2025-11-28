@@ -119,8 +119,8 @@ export default function Home() {
                 {/* Install command */}
                 <div className="mt-10 inline-flex items-center gap-2 sm:gap-3 rounded-lg border border-border bg-muted/50 px-3 sm:px-4 py-3 font-mono text-xs sm:text-sm max-w-full overflow-x-auto">
                   <span className="text-muted-foreground">$</span>
-                  <span className="whitespace-nowrap">pip install ai-infra</span>
-                  <CopyButton text="pip install ai-infra" className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground" />
+                  <span className="whitespace-nowrap">pip install svc-infra ai-infra fin-infra</span>
+                  <CopyButton text="pip install svc-infra ai-infra fin-infra" className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground" />
                 </div>
 
               </div>
