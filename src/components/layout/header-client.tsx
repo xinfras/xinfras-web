@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +13,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Github, Moon, Sun, Command, Search, FileText, Folder, ChevronDown } from "lucide-react";
+import { Github, Moon, Sun, Command, Search, FileText, Folder, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SearchDialog } from "@/components/search-dialog";
-import { cn } from "@/lib/utils";
+import { MobileNav } from "./mobile-nav";
 import type { DocsStructure, DocItem } from "@/lib/github";
 
 interface HeaderClientProps {
@@ -137,71 +136,13 @@ export function HeaderClient({ docsStructure }: HeaderClientProps) {
           </nav>
         </div>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-80 pr-0">
-            <Link href="/" className="flex items-center space-x-2">
-              <Command className="h-6 w-6" />
-              <span className="font-bold">xinfras</span>
-            </Link>
-            <div className="my-6 space-y-6">
-              <Link
-                href="/docs"
-                className="block text-sm font-medium transition-colors hover:text-foreground"
-              >
-                Docs
-              </Link>
-              {docsStructure.map((structure) => (
-                <div key={structure.package} className="space-y-2">
-                  <Link
-                    href={`/docs/${structure.package}`}
-                    className="block text-sm font-semibold"
-                  >
-                    {structure.package}
-                  </Link>
-                  {structure.items.length > 0 && (
-                    <div className="ml-2 space-y-1 border-l border-border pl-3">
-                      {structure.items.map((item) =>
-                        item.type === "dir" ? (
-                          <div key={item.path} className="space-y-1">
-                            <span className="block text-xs font-medium text-muted-foreground">
-                              {item.title}
-                            </span>
-                            {item.children?.map((child) => (
-                              <Link
-                                key={child.path}
-                                href={`/docs/${structure.package}/${child.slug}`}
-                                className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                              >
-                                {child.title}
-                              </Link>
-                            ))}
-                          </div>
-                        ) : (
-                          <Link
-                            key={item.path}
-                            href={`/docs/${structure.package}/${item.slug}`}
-                            className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-                          >
-                            {item.title}
-                          </Link>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </SheetContent>
-        </Sheet>
+        {/* Mobile Navigation */}
+        <MobileNav
+          docsStructure={docsStructure}
+          onSearchClick={() => setSearchOpen(true)}
+          isDark={isDark}
+          toggleTheme={toggleTheme}
+        />
 
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
