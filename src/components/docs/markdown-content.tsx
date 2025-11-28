@@ -90,7 +90,7 @@ const components: Components = {
     return <code className={className} {...props}>{children}</code>;
   },
   table: ({ children, ...props }) => (
-    <div className="my-4 overflow-x-auto">
+    <div className="my-4 overflow-x-auto rounded-lg border border-border">
       <table className="w-full border-collapse text-sm" {...props}>{children}</table>
     </div>
   ),
@@ -98,10 +98,10 @@ const components: Components = {
     <thead className="bg-muted/40 text-left text-muted-foreground" {...props}>{children}</thead>
   ),
   th: ({ children, ...props }) => (
-    <th className="px-4 py-2 font-medium whitespace-nowrap" {...props}>{children}</th>
+    <th className="px-4 py-2 font-medium whitespace-nowrap border-b border-border" {...props}>{children}</th>
   ),
   td: ({ children, ...props }) => (
-    <td className="px-4 py-2 border-t border-border/40" {...props}>{children}</td>
+    <td className="px-4 py-2 border-t border-border/50" {...props}>{children}</td>
   ),
   tr: ({ children, ...props }) => (
     <tr className="hover:bg-muted/20 transition-colors" {...props}>{children}</tr>
