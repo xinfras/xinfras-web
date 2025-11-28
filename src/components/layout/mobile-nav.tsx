@@ -10,7 +10,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import {
   Menu,
@@ -165,9 +164,9 @@ export function MobileNav({
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="flex w-[300px] flex-col p-0 sm:w-[350px]">
+      <SheetContent side="left" className="flex w-[300px] flex-col overflow-hidden p-0 sm:w-[350px]">
         {/* Header */}
-        <SheetHeader className="border-b px-4 py-3">
+        <SheetHeader className="shrink-0 border-b px-4 py-3">
           <SheetTitle asChild>
             <Link
               href="/"
@@ -181,7 +180,7 @@ export function MobileNav({
         </SheetHeader>
 
         {/* Search Button */}
-        <div className="px-4 py-3">
+        <div className="shrink-0 px-4 py-3">
           <Button
             variant="outline"
             onClick={handleSearchClick}
@@ -192,10 +191,10 @@ export function MobileNav({
           </Button>
         </div>
 
-        <Separator />
+        <Separator className="shrink-0" />
 
-        {/* Navigation */}
-        <ScrollArea className="flex-1 px-2">
+        {/* Navigation - scrollable area */}
+        <div className="min-h-0 flex-1 overflow-y-auto px-2">
           <div className="space-y-1 py-3">
             {/* Quick Links */}
             <NavLink href="/" icon={<Home className="h-4 w-4" />} onClose={handleClose}>
@@ -237,7 +236,7 @@ export function MobileNav({
               </CollapsibleSection>
             ))}
           </div>
-        </ScrollArea>
+        </div>
 
         {/* Footer Actions */}
         <div className="border-t px-4 py-3">
