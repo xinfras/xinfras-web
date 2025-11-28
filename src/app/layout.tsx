@@ -15,10 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "xinfras - Unified Infrastructure Frameworks",
   description: "Production-ready infrastructure frameworks for AI, backend services, and financial operations. Build apps faster with modern infrastructure.",
-  icons: {
-    icon: "/favicon.svg",
-    apple: "/icon.svg",
-  },
 };
 
 export default function RootLayout({

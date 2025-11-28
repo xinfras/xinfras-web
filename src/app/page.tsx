@@ -46,13 +46,13 @@ const frameworks = [
 const features = [
   {
     icon: Zap,
-    title: "Blazing Fast",
-    description: "Async-first architecture with intelligent caching for maximum performance.",
+    title: "Async-First",
+    description: "Built on async/await patterns for non-blocking, high-concurrency operations.",
   },
   {
     icon: Shield,
-    title: "Battle Tested",
-    description: "Used in production by teams handling millions of requests daily.",
+    title: "Type Safe",
+    description: "Full type hints and Pydantic models for excellent IDE support and fewer bugs.",
   },
   {
     icon: Puzzle,
@@ -61,8 +61,8 @@ const features = [
   },
   {
     icon: Layers,
-    title: "Type Safe",
-    description: "Full TypeScript and Python type hints for excellent developer experience.",
+    title: "Well Documented",
+    description: "Comprehensive docs and examples to get you started quickly.",
   },
 ];
 
@@ -119,8 +119,8 @@ export default function Home() {
                 {/* Install command */}
                 <div className="mt-10 inline-flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm">
                   <span className="text-muted-foreground">$</span>
-                  <span>pip install ai-infra svc-infra fin-infra</span>
-                  <CopyButton text="pip install ai-infra svc-infra fin-infra" className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                  <span>pip install ai-infra</span>
+                  <CopyButton text="pip install ai-infra" className="h-6 w-6 text-muted-foreground hover:text-foreground" />
                 </div>
 
               </div>
@@ -208,28 +208,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Stats Section */}
-          <section className="py-24 sm:py-32 border-y border-border">
-            <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-                {[
-                  { value: "10K+", label: "Weekly Downloads", sublabel: "and growing" },
-                  { value: "99.9%", label: "Uptime", sublabel: "across all services" },
-                  { value: "500+", label: "GitHub Stars", sublabel: "from the community" },
-                  { value: "<50ms", label: "Response Time", sublabel: "p95 latency" },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-4xl font-bold tracking-tight sm:text-5xl text-primary">
-                      {stat.value}
-                    </div>
-                    <div className="mt-2 font-medium">{stat.label}</div>
-                    <div className="text-sm text-muted-foreground">{stat.sublabel}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
           {/* CTA Section */}
           <section className="py-24 sm:py-32">
             <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -241,10 +219,10 @@ export default function Home() {
                   </div>
                   
                   <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-                    Ready to build something amazing?
+                    Ready to build something?
                   </h2>
                   <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-                    Join developers who are shipping faster with our infrastructure frameworks.
+                    Get started with our Python infrastructure frameworks in minutes.
                   </p>
                   
                   <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -273,11 +251,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-emerald-500" />
-                      Active Community
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Check className="h-4 w-4 text-emerald-500" />
-                      Production Ready
+                      Python 3.11+
                     </div>
                   </div>
                 </div>
