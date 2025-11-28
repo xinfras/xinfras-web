@@ -44,6 +44,15 @@ export const contentSources = {
 
 export type ContentSource = keyof typeof contentSources;
 
+// Generate GitHub URL for viewing the source file
+export function getGithubUrl(source: ContentSource, docPath?: string): string {
+  const config = contentSources[source];
+  const filePath = docPath 
+    ? `${config.docsPath}/${docPath}.md`
+    : config.path;
+  return `https://github.com/${config.owner}/${config.repo}/blob/${config.branch}/${filePath}`;
+}
+
 interface FetchOptions {
   owner: string;
   repo: string;

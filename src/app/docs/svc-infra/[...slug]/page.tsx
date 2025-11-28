@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Server } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DocsPageContent } from "@/components/docs/docs-page-content";
-import { fetchDocContent } from "@/lib/github";
+import { fetchDocContent, getGithubUrl } from "@/lib/github";
 
 export const revalidate = 300;
 
@@ -30,6 +30,7 @@ export default async function SvcInfraDocPage({ params }: PageProps) {
   // Extract title from first heading or use slug
   const titleMatch = content.match(/^#\s+(.+)$/m);
   const title = titleMatch ? titleMatch[1] : slug[slug.length - 1].replace(/-/g, " ");
+  const githubUrl = getGithubUrl("svc-infra", slug.join("/"));
 
   const header = (
     <div className="flex items-center gap-3">
@@ -45,7 +46,7 @@ export default async function SvcInfraDocPage({ params }: PageProps) {
     </div>
   );
 
-  return <DocsPageContent content={content} header={header} />;
+  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} />;
 }
 
 export async function generateStaticParams() {

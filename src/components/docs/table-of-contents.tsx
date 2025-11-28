@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
 interface TocItem {
@@ -82,12 +81,12 @@ export function TableOfContents({ content }: TableOfContentsProps) {
   }
 
   return (
-    <ScrollArea className="h-full py-6 lg:py-8">
+    <div className="py-6 lg:py-8">
       <div className="space-y-1">
         <h4 className="mb-4 px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
           On This Page
         </h4>
-        <nav className="relative">
+        <nav className="relative max-h-[calc(100vh-12rem)] overflow-y-auto">
           {/* Active indicator line */}
           <div className="absolute left-0 top-0 bottom-0 w-px bg-border" />
           
@@ -140,6 +139,6 @@ export function TableOfContents({ content }: TableOfContentsProps) {
           </div>
         </nav>
       </div>
-    </ScrollArea>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DocsPageContent } from "@/components/docs/docs-page-content";
-import { fetchDocsContent, fallbackContent } from "@/lib/github";
+import { fetchDocsContent, fallbackContent, getGithubUrl } from "@/lib/github";
 
 export const revalidate = 300; // Revalidate every 5 minutes
 
@@ -15,6 +15,7 @@ async function getContent() {
 
 export default async function FinInfraPage() {
   const content = await getContent();
+  const githubUrl = getGithubUrl("fin-infra");
 
   const header = (
     <div className="space-y-3">
@@ -29,5 +30,5 @@ export default async function FinInfraPage() {
     </div>
   );
 
-  return <DocsPageContent content={content} header={header} />;
+  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} />;
 }
