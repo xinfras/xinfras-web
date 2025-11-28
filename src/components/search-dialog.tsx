@@ -38,6 +38,33 @@ const sourceColors = {
   "fin-infra": "text-emerald-500",
 };
 
+// Highlight matching text in search results
+function HighlightText({ text, query }: { text: string; query: string }) {
+  if (!query || query.length < 2) {
+    return <>{text}</>;
+  }
+  
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const index = lowerText.indexOf(lowerQuery);
+  
+  if (index === -1) {
+    return <>{text}</>;
+  }
+  
+  const before = text.slice(0, index);
+  const match = text.slice(index, index + query.length);
+  const after = text.slice(index + query.length);
+  
+  return (
+    <>
+      {before}
+      <mark className="bg-yellow-200 dark:bg-yellow-500/30 text-inherit rounded-sm px-0.5">{match}</mark>
+      {after}
+    </>
+  );
+}
+
 interface SearchDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -206,7 +233,9 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                       </div>
                       <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="flex items-center gap-2 overflow-hidden">
-                          <span className="font-medium truncate">{result.title}</span>
+                          <span className="font-medium truncate">
+                            <HighlightText text={result.title} query={query} />
+                          </span>
                           <span className="text-xs text-muted-foreground px-1.5 py-0.5 rounded bg-muted shrink-0">
                             {result.source}
                           </span>
@@ -231,9 +260,11 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
                         >
                           <Hash className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium text-sm truncate">{match.section}</div>
+                            <div className="font-medium text-sm truncate">
+                              <HighlightText text={match.section || ""} query={query} />
+                            </div>
                             <p className="text-xs text-muted-foreground truncate mt-0.5">
-                              {match.text}
+                              <HighlightText text={match.text} query={query} />
                             </p>
                           </div>
                         </Button>
