@@ -90,8 +90,10 @@ const components: Components = {
     return <code className={className} {...props}>{children}</code>;
   },
   table: ({ children, ...props }) => (
-    <div className="my-6 w-full overflow-x-auto">
-      <table {...props}>{children}</table>
+    <div className="my-4 -mx-4 sm:mx-0 overflow-x-auto">
+      <div className="inline-block min-w-full px-4 sm:px-0 align-middle">
+        <table className="min-w-full" {...props}>{children}</table>
+      </div>
     </div>
   ),
 };
@@ -109,9 +111,13 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         "prose-h3:text-xl prose-h3:mt-8",
         "prose-p:leading-7",
         "prose-a:text-primary prose-a:no-underline hover:prose-a:underline",
-        "prose-table:border prose-table:border-border",
-        "prose-th:border prose-th:border-border prose-th:bg-muted prose-th:px-4 prose-th:py-2",
-        "prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2",
+        // Table styles - cleaner, less rigid
+        "prose-table:border-collapse prose-table:w-full prose-table:text-sm",
+        "prose-thead:bg-muted/50 prose-thead:border-b prose-thead:border-border",
+        "prose-th:px-3 prose-th:py-2.5 prose-th:text-left prose-th:font-medium prose-th:text-muted-foreground",
+        "prose-tbody:divide-y prose-tbody:divide-border",
+        "prose-td:px-3 prose-td:py-2.5",
+        "prose-tr:transition-colors hover:prose-tr:bg-muted/30",
         "prose-blockquote:border-l-2 prose-blockquote:border-border prose-blockquote:not-italic",
         "prose-ul:my-4 prose-ol:my-4",
         "prose-li:my-1",
