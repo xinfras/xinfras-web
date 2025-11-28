@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -12,11 +13,36 @@ import type { Components } from "react-markdown";
 interface MarkdownContentProps {
   content: string;
   className?: string;
+  packageName?: string;
 }
 
 // Remove the first H1 from markdown content since we show it in the header
 function removeFirstH1(content: string): string {
   return content.replace(/^#\s+.+\n+/, "");
+}
+
+// Transform relative doc links to proper routes
+function transformDocLink(href: string, packageName?: string): string {
+  // Skip external links, anchors, and absolute paths
+  if (!href || href.startsWith("http") || href.startsWith("#") || href.startsWith("/")) {
+    return href;
+  }
+  
+  // Handle relative markdown links like "docs/api.md" or "./docs/api.md"
+  let cleanHref = href.replace(/^\.\//, ""); // Remove leading ./
+  
+  // Remove docs/ prefix if present (since docs is the root for the package)
+  cleanHref = cleanHref.replace(/^docs\//, "");
+  
+  // Remove .md extension
+  cleanHref = cleanHref.replace(/\.md$/, "");
+  
+  // Build the final path
+  if (packageName) {
+    return `/${packageName}/${cleanHref}`;
+  }
+  
+  return cleanHref;
 }
 
 // Clean, minimal code block
@@ -64,8 +90,8 @@ function CodeBlock({ children, className }: { children: string; className?: stri
   );
 }
 
-// Custom components for markdown
-const components: Components = {
+// Custom components for markdown (base components without link handling)
+const baseComponents: Partial<Components> = {
   pre: ({ children }) => {
     const codeElement = children as React.ReactElement<{ children: string; className?: string }>;
     if (codeElement?.props) {
@@ -108,8 +134,34 @@ const components: Components = {
   ),
 };
 
-export function MarkdownContent({ content, className }: MarkdownContentProps) {
+// Create components with packageName for link transformation
+function createComponents(packageName?: string): Components {
+  return {
+    ...baseComponents,
+    a: ({ href, children, ...props }) => {
+      const transformedHref = transformDocLink(href || "", packageName);
+      const isExternal = transformedHref.startsWith("http");
+      
+      if (isExternal) {
+        return (
+          <a href={transformedHref} target="_blank" rel="noopener noreferrer" {...props}>
+            {children}
+          </a>
+        );
+      }
+      
+      return (
+        <Link href={transformedHref} {...props}>
+          {children}
+        </Link>
+      );
+    },
+  };
+}
+
+export function MarkdownContent({ content, className, packageName }: MarkdownContentProps) {
   const processedContent = removeFirstH1(content);
+  const components = createComponents(packageName);
   
   return (
     <article

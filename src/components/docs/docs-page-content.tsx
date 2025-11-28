@@ -10,9 +10,10 @@ interface DocsPageContentProps {
   content: string;
   header: React.ReactNode;
   githubUrl?: string;
+  packageName?: string;
 }
 
-export function DocsPageContent({ content, header, githubUrl }: DocsPageContentProps) {
+export function DocsPageContent({ content, header, githubUrl, packageName }: DocsPageContentProps) {
   return (
     <div className="flex gap-10">
       {/* Search highlight handler */}
@@ -44,7 +45,7 @@ export function DocsPageContent({ content, header, githubUrl }: DocsPageContentP
               </Button>
             )}
           </div>
-          <MarkdownContent content={content} />
+          <MarkdownContent content={content} packageName={packageName} />
         </div>
       </div>
     </div>

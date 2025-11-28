@@ -30,5 +30,5 @@ export default async function SvcInfraPage() {
     </div>
   );
 
-  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} />;
+  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} packageName="svc-infra" />;
 }

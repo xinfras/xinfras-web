@@ -30,5 +30,5 @@ export default async function AIInfraPage() {
     </div>
   );
 
-  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} />;
+  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} packageName="ai-infra" />;
 }

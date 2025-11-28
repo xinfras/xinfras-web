@@ -46,7 +46,7 @@ export default async function SvcInfraDocPage({ params }: PageProps) {
     </div>
   );
 
-  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} />;
+  return <DocsPageContent content={content} header={header} githubUrl={githubUrl} packageName="svc-infra" />;
 }
 
 export async function generateStaticParams() {
