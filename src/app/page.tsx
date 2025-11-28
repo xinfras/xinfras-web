@@ -68,7 +68,7 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background overflow-x-hidden">
       <InteractiveBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
         <Header />
@@ -117,10 +117,10 @@ export default function Home() {
                 </div>
 
                 {/* Install command */}
-                <div className="mt-10 inline-flex items-center gap-3 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm">
+                <div className="mt-10 inline-flex items-center gap-2 sm:gap-3 rounded-lg border border-border bg-muted/50 px-3 sm:px-4 py-3 font-mono text-xs sm:text-sm max-w-full overflow-x-auto">
                   <span className="text-muted-foreground">$</span>
-                  <span>pip install ai-infra</span>
-                  <CopyButton text="pip install ai-infra" className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+                  <span className="whitespace-nowrap">pip install ai-infra</span>
+                  <CopyButton text="pip install ai-infra" className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground" />
                 </div>
 
               </div>
