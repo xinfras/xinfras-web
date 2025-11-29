@@ -70,8 +70,8 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-background overflow-x-hidden">
       <InteractiveBackground />
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <Header />
+      <Header />
+      <div className="relative z-10 flex min-h-screen flex-col pt-14">
         <main className="flex-1">
           
           {/* Hero Section */}
